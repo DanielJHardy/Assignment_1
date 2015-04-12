@@ -19,6 +19,18 @@
     <Filter Include="Utility">
       <UniqueIdentifier>{c50e8533-ad4c-4cfb-afa3-6f7e8f2a3045}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{91941cbf-c4f9-4a4d-80c5-81f01ccb92ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{018d6505-9066-4e62-ab8a-f1cf16c363ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Game">
+      <UniqueIdentifier>{d614af55-0dba-4107-bdcd-0f405e29909c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Levels">
+      <UniqueIdentifier>{618ec127-1cf3-46ba-ac73-a966c94594f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\external\Gizmos.cpp">
@@ -33,6 +45,9 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Engine\Game.cpp">
+      <Filter>Engine\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\external\Gizmos.h">
@@ -46,6 +61,12 @@
     </ClInclude>
     <ClInclude Include="src\external\tiny_obj_loader.h">
       <Filter>External</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Game.h">
+      <Filter>Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Level.h">
+      <Filter>Engine\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

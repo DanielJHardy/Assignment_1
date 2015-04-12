@@ -77,12 +77,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Engine\Game.cpp" />
     <ClCompile Include="src\external\Gizmos.cpp" />
     <ClCompile Include="src\external\gl_core_4_4.c" />
     <ClCompile Include="src\external\tiny_obj_loader.cc" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Engine\Game.h" />
+    <ClInclude Include="src\Engine\Level.h" />
     <ClInclude Include="src\external\Gizmos.h" />
     <ClInclude Include="src\external\gl_core_4_4.h" />
     <ClInclude Include="src\external\stb_image.h" />
