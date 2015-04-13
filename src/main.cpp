@@ -1,12 +1,18 @@
 #include "Engine\Game.h"
 
-void main()
+int main()
 {
 	Game gameManager;
 
-	//main game loop
-	while (true)
-	{
+	//if game failed to startup
+	if (gameManager.Startup() == false)
+		return -1;
 
+	//main game loop
+	while (gameManager.Update())
+	{
+		gameManager.Draw();
 	}
+
+	return 0;
 }

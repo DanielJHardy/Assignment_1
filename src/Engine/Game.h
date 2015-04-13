@@ -12,6 +12,7 @@
 
 struct GLFWwindow;
 
+//Game class for handling low-level game stuff (e.g. state changes, delta time)
 class Game
 {
 public:
@@ -32,6 +33,7 @@ public:
 	void SetLevel(unsigned int a_index);	//
 	void SetLevel(char* a_name);		   //// Sets the current level
 
+	//Note: first level added will be set as current level
 	unsigned int AddLevel(Level a_newLvl);				// 
 	unsigned int RemoveLevel(unsigned int a_index);		// returns int for success/error
 	unsigned int RemoveLevel(char* a_name);				// 

@@ -5,68 +5,67 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="External">
-      <UniqueIdentifier>{e5562e46-408a-4e83-8283-a9203fc773ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility">
-      <UniqueIdentifier>{c50e8533-ad4c-4cfb-afa3-6f7e8f2a3045}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Game">
-      <UniqueIdentifier>{91941cbf-c4f9-4a4d-80c5-81f01ccb92ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine">
+    <Filter Include="Source Files\Engine">
       <UniqueIdentifier>{018d6505-9066-4e62-ab8a-f1cf16c363ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Game">
+    <Filter Include="Source Files\Engine\Game">
       <UniqueIdentifier>{d614af55-0dba-4107-bdcd-0f405e29909c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Levels">
+    <Filter Include="Source Files\External">
+      <UniqueIdentifier>{e5562e46-408a-4e83-8283-a9203fc773ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{91941cbf-c4f9-4a4d-80c5-81f01ccb92ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Levels">
       <UniqueIdentifier>{618ec127-1cf3-46ba-ac73-a966c94594f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{c50e8533-ad4c-4cfb-afa3-6f7e8f2a3045}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{ad00df46-2475-43e0-8b3a-58693478b5bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\external\Gizmos.cpp">
-      <Filter>External</Filter>
+      <Filter>Source Files\External</Filter>
     </ClCompile>
     <ClCompile Include="src\external\gl_core_4_4.c">
-      <Filter>External</Filter>
+      <Filter>Source Files\External</Filter>
     </ClCompile>
     <ClCompile Include="src\external\tiny_obj_loader.cc">
-      <Filter>External</Filter>
+      <Filter>Source Files\External</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Game.cpp">
-      <Filter>Engine\Game</Filter>
+      <Filter>Source Files\Engine\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\external\Gizmos.h">
-      <Filter>External</Filter>
+      <Filter>Source Files\External</Filter>
     </ClInclude>
     <ClInclude Include="src\external\gl_core_4_4.h">
-      <Filter>External</Filter>
+      <Filter>Source Files\External</Filter>
     </ClInclude>
     <ClInclude Include="src\external\stb_image.h">
-      <Filter>External</Filter>
+      <Filter>Source Files\External</Filter>
     </ClInclude>
     <ClInclude Include="src\external\tiny_obj_loader.h">
-      <Filter>External</Filter>
+      <Filter>Source Files\External</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Game.h">
-      <Filter>Engine\Game</Filter>
+      <Filter>Source Files\Engine\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Level.h">
-      <Filter>Engine\Game</Filter>
+      <Filter>Source Files\Engine\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
