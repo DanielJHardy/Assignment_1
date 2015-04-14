@@ -30,6 +30,9 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{ad00df46-2475-43e0-8b3a-58693478b5bf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Actor">
+      <UniqueIdentifier>{e829f6b7-c945-4b3d-8df9-e3fd47b786e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\external\Gizmos.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Engine\Game.cpp">
+      <Filter>Source Files\Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Level.cpp">
       <Filter>Source Files\Engine\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -66,6 +72,12 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Level.h">
       <Filter>Source Files\Engine\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Actor.h">
+      <Filter>Source Files\Engine\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\glm_includes.h">
+      <Filter>Source Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

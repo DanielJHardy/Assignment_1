@@ -3,18 +3,8 @@
 #include "..\external\gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
-using glm::vec2;
-using glm::vec3;
-using glm::vec4;
-using glm::mat4;
-
 #define SUCCESS 1;
 #define FAILURE 0;
-
-class bob : public Level
-{
-
-};
 
 Game::Game()
 {
@@ -65,11 +55,16 @@ bool Game::Startup()
 	newLvl.Startup();
 
 	//add default level and set as current level
-	m_levels.push_back(bob());
+	m_levels.push_back(Level());
 
 	m_levels.push_back(newLvl);
 	m_levelIndex = 0;
 	m_currentLevel = m_levels[0];
+
+	//setup for deltatime
+	glfwSetTime(0.0);
+
+	return true;
 
 }
 
@@ -103,6 +98,10 @@ void Game::Draw()
 {
 	//draw level
 	m_currentLevel.Draw();
+
+	//openGL
+	glfwSwapBuffers(this->m_window);
+	glfwPollEvents();
 }
 
 //Level functions
@@ -120,7 +119,7 @@ char* Game::GetLevelName(unsigned int a_index) const
 void Game::SetLevel(unsigned int a_index)
 {
 	//check if there is a level with that index
-	if (a_index < m_levels.size)
+	if (a_index < m_levels.size())
 	{
 		//if new level starts up
 		if (m_levels[a_index].Startup())
@@ -142,7 +141,7 @@ void Game::SetLevel(unsigned int a_index)
 void Game::SetLevel(char* a_name)
 {
 	// look for level with the right name
-	for (unsigned int i = 0; i < m_levels.size; i++)
+	for (unsigned int i = 0; i < m_levels.size(); i++)
 	{
 		//set level as current if it has the right name
 		if (m_levels[i].m_name == a_name)
@@ -181,7 +180,7 @@ unsigned int Game::AddLevel(Level a_newLvl)
 	else //no need to loop through if there is nothing to loop through - YOLO
 	{
 		//dont add level if there is already a level with the same name
-		for (unsigned int i = 0; i < m_levels.size; i++)
+		for (unsigned int i = 0; i < m_levels.size(); i++)
 		{
 			if (m_levels[i].m_name == a_newLvl.m_name)
 				return FAILURE;	//return failure
@@ -192,7 +191,7 @@ unsigned int Game::AddLevel(Level a_newLvl)
 	m_levels.push_back(a_newLvl);
 
 	//if this was the first level added
-	if (m_levels.size == 1)
+	if (m_levels.size() == 1)
 	{
 		//set as current level
 		m_currentLevel = m_levels[0];
@@ -208,7 +207,7 @@ unsigned int Game::AddLevel(Level a_newLvl)
 unsigned int Game::RemoveLevel(unsigned int a_index)
 {
 	//if level doesnt exist return failure
-	if (a_index < m_levels.size)
+	if (a_index < m_levels.size())
 		return FAILURE;
 
 	//if level is current level
@@ -216,7 +215,7 @@ unsigned int Game::RemoveLevel(unsigned int a_index)
 		return FAILURE;
 
 	//remove level at index
-	m_levels.erase(m_levels.begin + a_index);
+	m_levels.erase(m_levels.begin() + a_index);
 
 	return SUCCESS;
 }
@@ -227,7 +226,7 @@ unsigned int Game::RemoveLevel(char* a_name)
 	if (m_currentLevel.m_name == a_name)
 		return FAILURE;
 
-	for (unsigned int i = 0; i < m_levels.size; i++)
+	for (unsigned int i = 0; i < m_levels.size(); i++)
 	{
 		//if level found
 		if (m_levels[i].m_name == a_name)

@@ -1,9 +1,13 @@
 #ifndef _LEVEL_H_
 #define _LEVEL_H_
 
-class actor //temp
-{
+#include <vector>
 
+class Actor //temp
+{
+public:
+	void Update();
+	void Draw();
 };
 
 // Level class for containing and updating all actors in the level
@@ -20,7 +24,7 @@ public:
 	void Draw();
 
 public:
-	std::vector<actor> m_actors;	//all the actors in the level
+	std::vector<Actor> m_actors;	//all the actors in the level
 
 private:
 	char* m_name;	//level title

@@ -4,11 +4,7 @@
 #include <vector>
 
 #include "Level.h"
-
-//glm
-#define GLM_SWIZZLE
-#include "glm/glm.hpp"
-#include "glm/ext.hpp"
+#include "glm_includes.h"
 
 struct GLFWwindow;
 
@@ -48,6 +44,8 @@ private:
 
 	//OpenGL
 	GLFWwindow* m_window;
+
+public:
 	char* m_window_title;
 
 	unsigned int m_screenWidth;
