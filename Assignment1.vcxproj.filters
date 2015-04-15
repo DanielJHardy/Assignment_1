@@ -39,6 +39,9 @@
     <Filter Include="Source Files\Engine\Actors\GizmoGrid">
       <UniqueIdentifier>{adab81df-9ce3-44c5-a173-1343308a7793}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Actors\Mesh">
+      <UniqueIdentifier>{58865d1d-f965-4a91-9160-f8a4a5779b90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\external\Gizmos.cpp">
@@ -70,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\GizmoGrid.cpp">
       <Filter>Source Files\Engine\Actors\GizmoGrid</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Mesh.cpp">
+      <Filter>Source Files\Engine\Actors\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +111,9 @@
     </ClInclude>
     <ClInclude Include="src\Engine\GizmoGrid.h">
       <Filter>Source Files\Engine\Actors\GizmoGrid</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Mesh.h">
+      <Filter>Source Files\Engine\Actors\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

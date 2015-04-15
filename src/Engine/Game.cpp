@@ -62,6 +62,10 @@ bool Game::Startup()
 	//setup for deltatime
 	glfwSetTime(0.0);
 
+
+	//OpenGL flags
+	glEnable(GL_CULL_FACE);
+
 	return true;
 }
 
