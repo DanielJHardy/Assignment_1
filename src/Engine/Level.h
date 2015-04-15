@@ -2,18 +2,12 @@
 #define _LEVEL_H_
 
 #include <vector>
-
-class Actor //temp
-{
-public:
-	void Update();
-	void Draw();
-};
+#include "Actor.h"
+#include "Camera.h"
 
 // Level class for containing and updating all actors in the level
 class Level
 {
-	friend class Game;
 public:
 	Level();
 
@@ -24,9 +18,9 @@ public:
 	void Draw();
 
 public:
-	std::vector<Actor> m_actors;	//all the actors in the level
+	std::vector<Actor*> m_actors;	//all the actors in the level
+	Camera* m_camera;
 
-private:
 	char* m_name;	//level title
 
 };

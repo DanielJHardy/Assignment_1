@@ -55,8 +55,6 @@ bool Game::Startup()
 	newLvl.Startup();
 
 	//add default level and set as current level
-	m_levels.push_back(Level());
-
 	m_levels.push_back(newLvl);
 	m_levelIndex = 0;
 	m_currentLevel = m_levels[0];
@@ -65,7 +63,6 @@ bool Game::Startup()
 	glfwSetTime(0.0);
 
 	return true;
-
 }
 
 void Game::Shutdown()
@@ -88,6 +85,11 @@ bool Game::Update()
 	float dt = (float)glfwGetTime();
 	glfwSetTime(0.0);
 
+
+
+
+
+
 	//update level
 	m_currentLevel.Update(dt);
 
@@ -96,6 +98,9 @@ bool Game::Update()
 
 void Game::Draw()
 {
+	//clear screen
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	//draw level
 	m_currentLevel.Draw();
 

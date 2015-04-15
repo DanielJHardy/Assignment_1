@@ -7,46 +7,24 @@
 class Actor
 {
 public:
-	Actor()
-	{
-		m_active = true;
+	Actor();
+	~Actor();
 
-		//setup as identity
-		m_worldTransform = mat4(1);
-		m_localTransform = mat4(1);
-	}
-
-	~Actor()
-	{
-		Destroy();
-	}
-
-	virtual void Update() = 0;
-	virtual void Draw() = 0;
+	virtual void Update(float a_dt);
+	virtual void Draw();
 
 	//children functions
-	void AddChild(Actor* a_child)
-	{
-		m_children.push_back(a_child);
-	}
+	void AddChild(Actor* a_child);
+	void DestroyChild(unsigned int a_index);
+	void Destroy();
 
-	void DestroyChild(unsigned int a_index)
-	{
-		m_children[a_index]->Destroy(); // destroy child's children
-		delete m_children[a_index];	//delete child
-		m_children.erase(m_children.begin() + a_index); //remove child from children
-	}
+	//getter functions
+	mat4 getWorldTransform() const;
+	mat4 getLocalTransform() const;
 
-	void Destroy()
-	{
-		// for each child
-		while (m_children.size() != 0)
-		{
-			m_children[0]->Destroy(); //call childs destroy
-			delete m_children[0];	//delete pointers data
-			m_children.erase(m_children.begin());	//remove from list of children
-		}
-	}
+	bool getActive() const;
+
+
 
 protected:
 	//transforms
@@ -57,7 +35,6 @@ protected:
 
 private:
 	std::vector<Actor*> m_children;	//parented actors
-
 
 };
 

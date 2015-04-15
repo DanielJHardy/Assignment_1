@@ -77,7 +77,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Engine\Actor.cpp" />
+    <ClCompile Include="src\Engine\Camera.cpp" />
+    <ClCompile Include="src\Engine\FlyCam.cpp" />
     <ClCompile Include="src\Engine\Game.cpp" />
+    <ClCompile Include="src\Engine\GizmoGrid.cpp" />
     <ClCompile Include="src\Engine\Level.cpp" />
     <ClCompile Include="src\external\Gizmos.cpp" />
     <ClCompile Include="src\external\gl_core_4_4.c" />
@@ -86,7 +90,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Engine\Actor.h" />
+    <ClInclude Include="src\Engine\Camera.h" />
+    <ClInclude Include="src\Engine\FlyCam.h" />
     <ClInclude Include="src\Engine\Game.h" />
+    <ClInclude Include="src\Engine\GizmoGrid.h" />
     <ClInclude Include="src\Engine\glm_includes.h" />
     <ClInclude Include="src\Engine\Level.h" />
     <ClInclude Include="src\external\Gizmos.h" />

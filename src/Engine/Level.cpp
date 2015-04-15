@@ -1,8 +1,9 @@
 #include "Level.h"
+#include "..\external\Gizmos.h"
 
 Level::Level()
 {
-	m_actors = std::vector<Actor>();
+	m_actors = std::vector<Actor*>();
 }
 
 bool Level::Startup()
@@ -13,6 +14,11 @@ bool Level::Startup()
 		printf("Level name not set. Set name before startup");
 		return false;
 	}
+
+	//setup gizmos
+	Gizmos::create();
+
+	Gizmos::addTransform(mat4(1), 1);
 
 	return true;
 }
@@ -27,8 +33,12 @@ bool Level::Update(float a_dt)
 	//Update all the actors
 	for (unsigned int i = 0; i < m_actors.size(); i++)
 	{
-		m_actors[i].Update();
+		m_actors[i]->Update(a_dt);
 	}
+
+	//update camera
+	m_camera->Update(a_dt);
+
 
 	return true;
 }
@@ -36,8 +46,10 @@ bool Level::Update(float a_dt)
 void Level::Draw()
 {
 	//Draw all actors
-	for each (Actor actr in m_actors)
+	for (unsigned int i = 0; i < m_actors.size(); i++)
 	{
-		actr.Draw();
+		m_actors[i]->Draw();
 	}
+
+	Gizmos::draw(m_camera->getProjectionView());
 }

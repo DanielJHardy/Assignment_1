@@ -30,8 +30,14 @@
     <Filter Include="Resource Files\Shaders">
       <UniqueIdentifier>{ad00df46-2475-43e0-8b3a-58693478b5bf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Engine\Actor">
+    <Filter Include="Source Files\Engine\Cameras">
+      <UniqueIdentifier>{a84d4af8-9170-4a51-8b80-a506e8130f6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Actors">
       <UniqueIdentifier>{e829f6b7-c945-4b3d-8df9-e3fd47b786e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Engine\Actors\GizmoGrid">
+      <UniqueIdentifier>{adab81df-9ce3-44c5-a173-1343308a7793}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +58,18 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Level.cpp">
       <Filter>Source Files\Engine\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Actor.cpp">
+      <Filter>Source Files\Engine\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Camera.cpp">
+      <Filter>Source Files\Engine\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\FlyCam.cpp">
+      <Filter>Source Files\Engine\Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\GizmoGrid.cpp">
+      <Filter>Source Files\Engine\Actors\GizmoGrid</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,10 +92,19 @@
       <Filter>Source Files\Engine\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\Actor.h">
-      <Filter>Source Files\Engine\Actor</Filter>
+      <Filter>Source Files\Engine\Actors</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine\glm_includes.h">
       <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\Camera.h">
+      <Filter>Source Files\Engine\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\FlyCam.h">
+      <Filter>Source Files\Engine\Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\GizmoGrid.h">
+      <Filter>Source Files\Engine\Actors\GizmoGrid</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
