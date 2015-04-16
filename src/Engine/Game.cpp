@@ -65,6 +65,7 @@ bool Game::Startup()
 
 	//OpenGL flags
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 
 	return true;
 }

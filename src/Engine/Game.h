@@ -2,9 +2,9 @@
 #define _GAME_H_
 
 #include <vector>
+#include "glm_includes.h"
 
 #include "Level.h"
-#include "glm_includes.h"
 
 struct GLFWwindow;
 
@@ -34,6 +34,18 @@ public:
 	unsigned int RemoveLevel(unsigned int a_index);		// returns int for success/error
 	unsigned int RemoveLevel(char* a_name);				// 
 
+private:
+	//Rendering
+	void buildGbuffer();
+	void buildLightBuffer();
+
+	
+public: //Variables
+
+	char* m_window_title;
+
+	unsigned int m_screenWidth;
+	unsigned int m_screenHeight;
 
 private:
 
@@ -45,11 +57,7 @@ private:
 	//OpenGL
 	GLFWwindow* m_window;
 
-public:
-	char* m_window_title;
 
-	unsigned int m_screenWidth;
-	unsigned int m_screenHeight;
 
 
 };

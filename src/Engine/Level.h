@@ -2,8 +2,10 @@
 #define _LEVEL_H_
 
 #include <vector>
+
 #include "Actor.h"
 #include "Camera.h"
+#include "Light.h"
 
 // Level class for containing and updating all actors in the level
 class Level
@@ -22,6 +24,15 @@ public:
 	Camera* m_camera;
 
 	char* m_name;	//level title
+
+	//Lighting
+
+	//light meshes
+	bufferData m_pointLight;
+	bufferData m_directionalLight;
+
+	//light instances
+	std::vector<Light> m_lights
 
 };
 
