@@ -3,6 +3,10 @@
 
 //actors
 #include "Engine\GizmoGrid.h"
+#include "Engine\Mesh.h"
+
+//lights
+#include "Engine\DirectionalLight.h"
 
 //levels
 void AddLevel_3dEnviroment(Game& game);
@@ -55,11 +59,18 @@ void AddLevel_3dEnviroment(Game& game)
 	enviroment.m_camera = cam;
 
 	//////Actors//////
+	Mesh* bob = new Mesh();
+	bob->LoadOBJ("./data/models/rock/dragon.obj");
+	bob->SetPosition(vec3(0,0,10));
+	enviroment.m_actors.push_back(bob);
 
-	//grid
-	GizmoGrid* grid = new GizmoGrid();
-	grid->m_size = 100;
-	enviroment.m_actors.push_back(grid);
+
+	/////lights///////
+	DirectionalLight dirLight = DirectionalLight(vec3(0, -1, 0), vec3(1, 0, 0));
+	enviroment.m_lights_directional.push_back(dirLight);
+
+	PointLight blueLight = PointLight(vec3(0, 2, 3), vec3(0, 0, 1), 5);
+	enviroment.m_lights_point.push_back(blueLight);
 
 
 	//add level

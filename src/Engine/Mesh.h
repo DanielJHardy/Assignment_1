@@ -3,7 +3,7 @@
 
 #include "Actor.h"
 
-class Mesh : Actor
+class Mesh : public Actor
 {
 public:
 	Mesh();

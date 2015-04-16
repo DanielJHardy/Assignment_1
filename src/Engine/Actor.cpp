@@ -64,3 +64,8 @@ bool Actor::getActive() const
 {
 	return m_active;
 }
+
+void Actor::SetPosition(vec3 a_pos)
+{
+	m_worldTransform[3].xyz = a_pos;
+}

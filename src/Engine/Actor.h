@@ -24,6 +24,9 @@ public:
 
 	bool getActive() const;
 
+	//transform functions
+	void SetPosition(vec3 a_pos);
+
 
 
 protected:
