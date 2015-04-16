@@ -19,8 +19,8 @@ public:
 	// input instead of a filename that texture slot will not be used.
 	void LoadTextures(char* a_diff, char* a_norm, char* a_spec);
 
-private:
-	unsigned int LoadTexture(char* a_filename);
+	//loads a texture. used by LoadTextures
+	unsigned int LoadTexture(const char* a_filename);
 
 private:
 	//obj

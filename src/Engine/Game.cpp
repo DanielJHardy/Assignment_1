@@ -3,6 +3,10 @@
 #include "..\external\gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
+#include "PointLight.h"
+#include "DirectionalLight.h"
+#include "ShaderLoading.h"
+
 #define SUCCESS 1;
 #define FAILURE 0;
 
@@ -44,6 +48,15 @@ bool Game::Startup()
 
 	printf("Successfully loaded OpenGL version %d.%d\n", major_version, minor_version);
 
+	//build buffers
+	buildGbuffer();
+	buildLightBuffer();
+
+	//load shaders
+	LoadShaders("./data/shaders/gbuffer_vertex.glsl","./data/shaders/gbuffer_fragment.glsl",0,&m_gbuffer_program);
+	LoadShaders("./data/shaders/composite_vertex.glsl", "./data/shaders/composite_fragment.glsl", 0, &m_composite_program);
+	LoadShaders("./data/shaders/composite_vertex.glsl", "./data/shaders/directional_light_fragment.glsl", 0, &m_light_directional_program);
+	LoadShaders("./data/shaders/point_light_vertex.glsl", "./data/shaders/point_light_fragment.glsl", 0, &m_light_point_program);
 
 	//LEVEL//------------------------//
 	m_levels = std::vector<Level>();
@@ -59,13 +72,16 @@ bool Game::Startup()
 	m_levelIndex = 0;
 	m_currentLevel = m_levels[0];
 
-	//setup for deltatime
-	glfwSetTime(0.0);
-
+	//Lighting
+	PointLight::SetupLightMesh();
+	DirectionalLight::SetupLightMesh(vec2(m_screenWidth, m_screenHeight));
 
 	//OpenGL flags
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
+
+	//setup for deltatime
+	glfwSetTime(0.0);
 
 	return true;
 }
@@ -103,11 +119,143 @@ bool Game::Update()
 
 void Game::Draw()
 {
-	//clear screen
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//enable depth test
+	glEnable(GL_DEPTH_TEST);
+
+	/////////////G-BUFFER/////////////////////
+	//bind g-buffer and clear
+	glBindFramebuffer(GL_FRAMEBUFFER, m_gbuffer_fbo);
+	glClearColor(0, 0, 0, 0);
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	vec4 clear_color = vec4(0, 0, 0, 0);
+	vec4 clear_normal = vec4(0.5f, 0.5f, 0.5f, 0.5f);
+
+	glClearBufferfv(GL_COLOR, 0, (float*)&clear_color);
+	glClearBufferfv(GL_COLOR, 1, (float*)&clear_color);
+	glClearBufferfv(GL_COLOR, 2, (float*)&clear_normal);
+
+	//set gbuffer as current shader
+	glUseProgram(m_gbuffer_program);
+
+	//set shader uniforms
+	int view_uniform = glGetUniformLocation(m_gbuffer_program, "view");
+	int view_proj_uniform = glGetUniformLocation(m_gbuffer_program, "view_proj");
+
+	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getView());	//view
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getProjectionView()); //ProjView
+
+	//////draw scene///////																-<><><>- Objects
 
 	//draw level
 	m_currentLevel.Draw();
+
+	//draw Gizmos
+
+	///////////////////////<>
+	/////////////LIGHT BUFFER/////////////////////
+
+	//bind light buffer and clear
+	glBindFramebuffer(GL_FRAMEBUFFER, m_light_fbo);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//disable depth test
+	glDisable(GL_DEPTH_TEST);
+
+	// enable addative blending
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE, GL_ONE);
+
+	/////Directional Light////
+	glUseProgram(m_light_directional_program);
+
+	//set uniforms
+	int position_tex_uniform = glGetUniformLocation(m_light_directional_program, "position_tex");
+	int normals_tex_uniform = glGetUniformLocation(m_light_directional_program, "normals_tex");
+
+	glUniform1i(position_tex_uniform, 0);
+	glUniform1i(normals_tex_uniform, 1);
+
+	//set textures
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_position_texture);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_normals_texture);
+
+	//// render directional lights													-<><><>- directional
+
+	//render all the directional lights in the scene
+	for each (DirectionalLight light in m_currentLevel.m_lights_directional)
+	{
+		RenderDirectionalLight(light);
+	}
+
+	///
+	/////Point Light////
+
+	//use point light shader
+	glUseProgram(m_light_point_program);
+
+	//set uniforms
+	view_proj_uniform = glGetUniformLocation(m_light_point_program, "proj_view");
+
+	position_tex_uniform = glGetUniformLocation(m_light_point_program, "position_texture");
+	normals_tex_uniform = glGetUniformLocation(m_light_point_program, "normal_texture");
+
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getProjectionView());
+	glUniform1i(position_tex_uniform, 0);
+	glUniform1i(normals_tex_uniform, 1);
+
+	//set textures
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_position_texture);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_normals_texture);
+	//// render point lights														-<><><>- point
+
+	//render every point light in the current scene
+	for each (PointLight light in m_currentLevel.m_lights_point)
+	{
+		RenderPointLight(light);
+	}
+
+	///
+	//////////////////////////////
+
+	//disable blend
+	glDisable(GL_BLEND);
+
+	//unbind buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//clear
+	glClearColor(0.3f, 0.3f, 0.3f, 1);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//////////COMPOSITE PROGRAM///////////////
+
+	//use composite program
+	glUseProgram(m_composite_program);
+
+	//set uniforms
+	int albedo_tex_uniform = glGetUniformLocation(m_composite_program, "albedo_tex");
+	int light_tex_uniform = glGetUniformLocation(m_composite_program, "light_tex");
+
+	glUniform1i(albedo_tex_uniform, 0);
+	glUniform1i(light_tex_uniform, 1);
+
+	//set textures
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_albedo_texture);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_light_texture);
+
+	//draw scene quad
+	glBindVertexArray(DirectionalLight::light_mesh.m_VAO); //re-using directional light's screenspace-quad
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	//openGL
 	glfwSwapBuffers(this->m_window);
@@ -251,4 +399,121 @@ unsigned int Game::RemoveLevel(char* a_name)
 
 	//if level wasnt found
 	return FAILURE;
+}
+
+void Game::buildGbuffer()
+{
+	//framebuffer
+	glGenFramebuffers(1, &m_gbuffer_fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_gbuffer_fbo);
+
+	//textures
+	//albedo, position, normal, depth()
+
+	//albedo
+	glGenTextures(1, &m_albedo_texture);
+	glBindTexture(GL_TEXTURE_2D, m_albedo_texture);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8, m_screenWidth, m_screenHeight);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	//position
+	glGenTextures(1, &m_position_texture);
+	glBindTexture(GL_TEXTURE_2D, m_position_texture);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB32F, m_screenWidth, m_screenHeight);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	//normals
+	glGenTextures(1, &m_normals_texture);
+	glBindTexture(GL_TEXTURE_2D, m_normals_texture);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8, m_screenWidth, m_screenHeight);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	//depth
+	glGenRenderbuffers(1, &m_gbuffer_depth);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_gbuffer_depth);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_screenWidth, m_screenHeight);
+
+	//attach textures to frambuffer
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, m_albedo_texture, 0);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, m_position_texture, 0);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, m_normals_texture, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_gbuffer_depth);
+
+	GLenum targets[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+
+	glDrawBuffers(3, targets);
+
+	//check if it worked
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		printf("Error in creating gbuffer");
+	}
+
+	//unbind framebuffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Game::buildLightBuffer()
+{
+	//create the fbo
+	glGenFramebuffers(1, &m_light_fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_light_fbo);
+
+	//create textures
+	//light texture
+	glGenTextures(1, &m_light_texture);
+	glBindTexture(GL_TEXTURE_2D, m_light_texture);
+	glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8, m_screenWidth, m_screenHeight);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//attach textures
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_light_texture, 0);
+
+	GLenum light_target = GL_COLOR_ATTACHMENT0;
+	glDrawBuffers(1, &light_target);
+
+	//check for success
+	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (status != GL_FRAMEBUFFER_COMPLETE)
+	{
+		printf("Error - light framebuffer incorrect");
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Game::RenderDirectionalLight(DirectionalLight a_light)
+{
+	vec4 viewspace_light_dir = m_currentLevel.m_camera->getView() * vec4(a_light.m_direction, 0);
+
+	int light_dir_uniform = glGetUniformLocation(m_light_directional_program, "light_dir");
+	int light_color_uniform = glGetUniformLocation(m_light_directional_program, "light_color");
+
+	glUniform3fv(light_dir_uniform, 1, (float*)&viewspace_light_dir);
+	glUniform3fv(light_color_uniform, 1, (float*)&a_light.m_color);
+
+	glBindVertexArray(DirectionalLight::light_mesh.m_VAO);
+	glDrawElements(GL_TRIANGLES, DirectionalLight::light_mesh.m_indexCount, GL_UNSIGNED_INT, 0);
+}
+
+void Game::RenderPointLight(PointLight a_light)
+{
+	vec4 view_space_pos = m_currentLevel.m_camera->getView() * vec4(a_light.m_pos, 1);
+
+	int pos_uniform = glGetUniformLocation(m_light_point_program, "light_position");
+	int view_pos_uniform = glGetUniformLocation(m_light_point_program, "light_view_position");
+	int light_diffuse_uniform = glGetUniformLocation(m_light_point_program, "light_diffuse");
+	int light_radius_uniform = glGetUniformLocation(m_light_point_program, "light_radius");
+
+	glUniform3fv(pos_uniform, 1, (float*)&a_light.m_pos);
+	glUniform3fv(view_pos_uniform, 1, (float*)&view_space_pos);
+	glUniform3fv(light_diffuse_uniform, 1, (float*)&a_light.m_color);
+	glUniform1f(light_radius_uniform, a_light.m_radius);
+
+	glBindVertexArray(PointLight::light_mesh.m_VAO);
+	glDrawElements(GL_TRIANGLES, PointLight::light_mesh.m_indexCount, GL_UNSIGNED_INT, 0);
 }

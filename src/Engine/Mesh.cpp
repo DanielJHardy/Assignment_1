@@ -1,6 +1,8 @@
 #include "Mesh.h"
 
 #include "..\external\tiny_obj_loader.h"
+
+#define STB_IMAGE_IMPLEMENTATION
 #include "..\external\stb_image.h"
 
 #include "..\external\gl_core_4_4.h"
@@ -85,7 +87,7 @@ void Mesh::LoadTextures(char* a_diff, char* a_norm, char* a_spec)
 		m_texture_spec = 0;
 }
 
-unsigned int LoadTexture(const char* a_filename)
+unsigned int Mesh::LoadTexture(const char* a_filename)
 {
 	unsigned int rtnTexture;
 

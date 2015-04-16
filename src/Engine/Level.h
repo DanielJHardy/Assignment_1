@@ -5,7 +5,9 @@
 
 #include "Actor.h"
 #include "Camera.h"
-#include "Light.h"
+
+#include "DirectionalLight.h"
+#include "PointLight.h"
 
 // Level class for containing and updating all actors in the level
 class Level
@@ -32,7 +34,8 @@ public:
 	bufferData m_directionalLight;
 
 	//light instances
-	std::vector<Light> m_lights
+	std::vector<PointLight> m_lights_point;
+	std::vector<DirectionalLight> m_lights_directional;
 
 };
 

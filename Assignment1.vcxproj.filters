@@ -42,6 +42,24 @@
     <Filter Include="Source Files\Engine\Actors\Mesh">
       <UniqueIdentifier>{58865d1d-f965-4a91-9160-f8a4a5779b90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Lighting">
+      <UniqueIdentifier>{dd063a77-8bea-418a-be9c-3511bd29decd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\composite">
+      <UniqueIdentifier>{4cf19833-56dd-4628-8b00-62b034f77d56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\gbuffer">
+      <UniqueIdentifier>{4a13b7e4-6a43-4244-87b8-b21e333305ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\lights">
+      <UniqueIdentifier>{e24c220f-3c16-4f2b-8846-d44bba67f0d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\lights\point">
+      <UniqueIdentifier>{baf21538-e1ab-4bff-9459-4b190e51b57a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\lights\directional">
+      <UniqueIdentifier>{daef8272-6b2a-4b7c-90cf-9647563f30d8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\external\Gizmos.cpp">
@@ -76,6 +94,15 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Mesh.cpp">
       <Filter>Source Files\Engine\Actors\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\ShaderLoading.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\DirectionalLight.cpp">
+      <Filter>Source Files\Engine\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\PointLight.cpp">
+      <Filter>Source Files\Engine\Lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +141,15 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Mesh.h">
       <Filter>Source Files\Engine\Actors\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\PointLight.h">
+      <Filter>Source Files\Engine\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\DirectionalLight.h">
+      <Filter>Source Files\Engine\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\ShaderLoading.h">
+      <Filter>Source Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

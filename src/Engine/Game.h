@@ -39,6 +39,8 @@ private:
 	void buildGbuffer();
 	void buildLightBuffer();
 
+	void RenderDirectionalLight(DirectionalLight a_light);
+	void RenderPointLight(PointLight a_light);
 	
 public: //Variables
 
@@ -56,6 +58,24 @@ private:
 
 	//OpenGL
 	GLFWwindow* m_window;
+
+	//shaders
+	unsigned int m_gbuffer_program;
+	unsigned int m_composite_program;
+
+	unsigned int m_light_directional_program;
+	unsigned int m_light_point_program;
+
+	//g-buffer
+	unsigned int m_gbuffer_fbo;
+	unsigned int m_albedo_texture;
+	unsigned int m_position_texture;
+	unsigned int m_normals_texture;
+	unsigned int m_gbuffer_depth;
+
+	//lights
+	unsigned int m_light_fbo;
+	unsigned int m_light_texture;
 
 
 
