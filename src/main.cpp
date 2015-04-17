@@ -61,7 +61,6 @@ void AddLevel_3dEnviroment(Game& game)
 	//////Actors//////
 	Mesh* bob = new Mesh();
 	bob->LoadOBJ("./data/models/rock/dragon.obj");
-	bob->SetPosition(vec3(0,0,10));
 	enviroment.m_actors.push_back(bob);
 
 

@@ -27,14 +27,12 @@ public:
 	//transform functions
 	void SetPosition(vec3 a_pos);
 
-
+	bool m_active;	//should be updated and drawn
 
 protected:
 	//transforms
 	mat4 m_worldTransform;	//relative to worlds origin
 	mat4 m_localTransform;	//relative to parent (which is the same as world if there is no parent)
-
-	bool m_active;	//should be updated and drawn
 
 private:
 	std::vector<Actor*> m_children;	//parented actors

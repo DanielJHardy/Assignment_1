@@ -152,4 +152,27 @@
       <Filter>Source Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="data\shaders\gbuffer_fragment.glsl">
+      <Filter>Resource Files\Shaders\gbuffer</Filter>
+    </None>
+    <None Include="data\shaders\gbuffer_vertex.glsl">
+      <Filter>Resource Files\Shaders\gbuffer</Filter>
+    </None>
+    <None Include="data\shaders\composite_fragment.glsl">
+      <Filter>Resource Files\Shaders\composite</Filter>
+    </None>
+    <None Include="data\shaders\composite_vertex.glsl">
+      <Filter>Resource Files\Shaders\composite</Filter>
+    </None>
+    <None Include="data\shaders\directional_light_fragment.glsl">
+      <Filter>Resource Files\Shaders\lights\directional</Filter>
+    </None>
+    <None Include="data\shaders\point_light_fragment.glsl">
+      <Filter>Resource Files\Shaders\lights\point</Filter>
+    </None>
+    <None Include="data\shaders\point_light_vertex.glsl">
+      <Filter>Resource Files\Shaders\lights\point</Filter>
+    </None>
+  </ItemGroup>
 </Project>

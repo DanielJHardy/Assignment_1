@@ -49,6 +49,12 @@ public: //Variables
 	unsigned int m_screenWidth;
 	unsigned int m_screenHeight;
 
+	//OpenGL
+	static GLFWwindow* m_window;
+
+	//shaders
+	static unsigned int m_gbuffer_program;
+
 private:
 
 	// Level
@@ -56,11 +62,6 @@ private:
 	Level m_currentLevel;
 	unsigned int m_levelIndex;
 
-	//OpenGL
-	GLFWwindow* m_window;
-
-	//shaders
-	unsigned int m_gbuffer_program;
 	unsigned int m_composite_program;
 
 	unsigned int m_light_directional_program;

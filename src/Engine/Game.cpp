@@ -10,6 +10,9 @@
 #define SUCCESS 1;
 #define FAILURE 0;
 
+GLFWwindow* Game::m_window;
+unsigned int Game::m_gbuffer_program;
+
 Game::Game()
 {
 

@@ -8,22 +8,45 @@
 #include "..\external\gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
+#include <thread>
+
+#include "Game.h"
+
 Mesh::Mesh(){}
 Mesh::~Mesh(){}
 
 void Mesh::Update(float a_dt)
 {
-
+	if (glfwGetKey(Game::m_window, GLFW_KEY_UP) == GLFW_PRESS)
+	{
+		m_worldTransform[3] += vec4(3 * a_dt,0,0,0);
+	}
+	if (glfwGetKey(Game::m_window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		m_worldTransform[3] += vec4(0, -3 * a_dt, 0, 0);
+	}
+	if (glfwGetKey(Game::m_window, GLFW_KEY_LEFT) == GLFW_PRESS)
+	{
+		m_worldTransform = glm::rotate(m_worldTransform, 10.0f * a_dt, vec3(0, 1, 0));
+	}
 }
 
 void Mesh::Draw()
 {
-	glBindVertexArray(m_VAO);
-	glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+	if (m_active)
+	{
+		//world transform uniform
+		int world_uniform = glGetUniformLocation(Game::m_gbuffer_program, "world");
+		glUniformMatrix4fv(world_uniform, 1, GL_FALSE, (float*)&m_worldTransform);
+
+		glBindVertexArray(m_VAO);
+		glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+	}
 }
 
 void Mesh::LoadOBJ(char* a_filename)
 {
+
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
 	std::vector<float> vertex_data;
@@ -38,8 +61,12 @@ void Mesh::LoadOBJ(char* a_filename)
 	tinyobj::mesh_t* mesh = &shapes[0].mesh;
 	vertex_data.reserve(m_indexCount);
 
+
 	vertex_data.insert(vertex_data.end(), mesh->positions.begin(), mesh->positions.end());
 	vertex_data.insert(vertex_data.end(), mesh->normals.begin(), mesh->normals.end());
+
+	//texcoords
+	vertex_data.insert(vertex_data.end(), mesh->texcoords.begin(), mesh->texcoords.end());
 
 	//create OpenGL buffers
 	glGenVertexArrays(1, &m_VAO);
@@ -51,20 +78,23 @@ void Mesh::LoadOBJ(char* a_filename)
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m_indexCount, vertex_data.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* m_indexCount, vertex_data.data(), GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, shapes[0].mesh.indices.size()*sizeof(unsigned int), shapes[0].mesh.indices.data(), GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0); //positions
 	glEnableVertexAttribArray(1); //normals
+	glEnableVertexAttribArray(2); //texcoords
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 0, (void*)(sizeof(float)*shapes[0].mesh.positions.size()));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_TRUE, 0, (void*)((sizeof(float)*shapes[0].mesh.positions.size()) + (sizeof(float)*shapes[0].mesh.normals.size())));
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 }
+
 
 void Mesh::LoadTextures(char* a_diff, char* a_norm, char* a_spec)
 {
