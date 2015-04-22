@@ -39,6 +39,14 @@ void Mesh::Draw()
 		int world_uniform = glGetUniformLocation(Game::m_gbuffer_program, "world");
 		glUniformMatrix4fv(world_uniform, 1, GL_FALSE, (float*)&m_worldTransform);
 
+		//diffuse uniform
+		////set texture slot
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, m_texture_diffuse);
+
+		int diffuse_uniform = glGetUniformLocation(Game::m_gbuffer_program, "diffuse");
+		glUniform1i(diffuse_uniform, 0); //0 is GL_TEXTURE0
+		
 		glBindVertexArray(m_VAO);
 		glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
 	}
@@ -59,8 +67,7 @@ void Mesh::LoadOBJ(char* a_filename)
 
 	//read data
 	tinyobj::mesh_t* mesh = &shapes[0].mesh;
-	vertex_data.reserve(m_indexCount);
-
+	vertex_data.reserve(mesh->positions.size() + mesh->normals.size());
 
 	vertex_data.insert(vertex_data.end(), mesh->positions.begin(), mesh->positions.end());
 	vertex_data.insert(vertex_data.end(), mesh->normals.begin(), mesh->normals.end());
@@ -78,16 +85,16 @@ void Mesh::LoadOBJ(char* a_filename)
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IBO);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* m_indexCount, vertex_data.data(), GL_STATIC_DRAW);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, shapes[0].mesh.indices.size()*sizeof(unsigned int), shapes[0].mesh.indices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float)* vertex_data.size(), vertex_data.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * mesh->indices.size(), mesh->indices.data(), GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0); //positions
 	glEnableVertexAttribArray(1); //normals
 	glEnableVertexAttribArray(2); //texcoords
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 0, (void*)(sizeof(float)*shapes[0].mesh.positions.size()));
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_TRUE, 0, (void*)((sizeof(float)*shapes[0].mesh.positions.size()) + (sizeof(float)*shapes[0].mesh.normals.size())));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_TRUE, 0, (void*)(sizeof(float)* mesh->positions.size()));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_TRUE, 0, (void*)(sizeof(float)* (mesh->positions.size() + mesh->normals.size())));
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

@@ -4,6 +4,8 @@
 #include <vector>
 #include "glm_includes.h"
 
+#include "AntTweakBar.h"
+
 #include "Level.h"
 
 struct GLFWwindow;
@@ -34,6 +36,7 @@ public:
 	unsigned int RemoveLevel(unsigned int a_index);		// returns int for success/error
 	unsigned int RemoveLevel(char* a_name);				// 
 
+
 private:
 	//Rendering
 	void buildGbuffer();
@@ -54,6 +57,9 @@ public: //Variables
 
 	//shaders
 	static unsigned int m_gbuffer_program;
+
+	//GUI
+	TwBar* m_bar;
 
 private:
 

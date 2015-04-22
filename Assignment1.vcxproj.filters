@@ -151,6 +151,9 @@
     <ClInclude Include="src\Engine\ShaderLoading.h">
       <Filter>Source Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Callbacks.h">
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\gbuffer_fragment.glsl">

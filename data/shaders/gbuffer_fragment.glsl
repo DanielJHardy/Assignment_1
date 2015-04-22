@@ -15,5 +15,5 @@ void main()
 	position = viewspace_position.xyz;
 	normal = (viewspace_normal.xyz) * 0.5f + 0.5f;
 
-	albedo = texture(diffuse, vTexCoord);
+	albedo = texture(diffuse, vTexCoord).xyz;
 }

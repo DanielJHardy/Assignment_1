@@ -60,18 +60,21 @@ void AddLevel_3dEnviroment(Game& game)
 
 	//////Actors//////
 	Mesh* bob = new Mesh();
-	bob->LoadOBJ("./data/models/rock/dragon.obj");
+	bob->LoadOBJ("./data/models/f16.obj");
+	bob->LoadTextures("./data/textures/f16t.bmp", nullptr, nullptr);
 	enviroment.m_actors.push_back(bob);
 
 
 	/////lights///////
-	DirectionalLight dirLight = DirectionalLight(vec3(0, -1, 0), vec3(1, 0, 0));
+	DirectionalLight dirLight = DirectionalLight(vec3(0, -1, 0), vec3(1, 1, 1));
 	enviroment.m_lights_directional.push_back(dirLight);
 
-	PointLight blueLight = PointLight(vec3(0, 2, 3), vec3(0, 0, 1), 5);
-	enviroment.m_lights_point.push_back(blueLight);
+
+	//PointLight blueLight = PointLight(vec3(0, 2, 3), vec3(0, 0, 1), 5);
+	//enviroment.m_lights_point.push_back(blueLight);
 
 
 	//add level
 	game.AddLevel(enviroment);
+
 }

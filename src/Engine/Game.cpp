@@ -7,6 +7,8 @@
 #include "DirectionalLight.h"
 #include "ShaderLoading.h"
 
+#include "Callbacks.h"
+
 #define SUCCESS 1;
 #define FAILURE 0;
 
@@ -22,6 +24,7 @@ Game::Game()
 
 bool Game::Startup()
 {
+
 	//OPENGL//-----------------------//
 
 	// Loads up glfw
@@ -79,8 +82,16 @@ bool Game::Startup()
 	PointLight::SetupLightMesh();
 	DirectionalLight::SetupLightMesh(vec2(m_screenWidth, m_screenHeight));
 
+	//GUI
+	TwInit(TW_OPENGL_CORE, nullptr);
+	TwWindowSize(m_screenWidth, m_screenHeight);
+
+	SetCallbacks(m_window);
+
+	m_bar = TwNewBar("Awesome Bar");
+
 	//OpenGL flags
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
 	//setup for deltatime
@@ -93,6 +104,10 @@ void Game::Shutdown()
 {
 	//shutdown the level
 	m_currentLevel.Shutdown();
+
+	//gui
+	TwDeleteAllBars();
+	TwTerminate();
 
 	//openGL
 	glfwDestroyWindow(this->m_window);
@@ -110,7 +125,7 @@ bool Game::Update()
 	glfwSetTime(0.0);
 
 
-
+	TwAddVarRW(m_bar, "light Dir", TW_TYPE_DIR3F, &m_currentLevel.m_lights_directional[0], "");
 
 
 
@@ -259,6 +274,9 @@ void Game::Draw()
 	//draw scene quad
 	glBindVertexArray(DirectionalLight::light_mesh.m_VAO); //re-using directional light's screenspace-quad
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	//gui
+	TwDraw();
 
 	//openGL
 	glfwSwapBuffers(this->m_window);
