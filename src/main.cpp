@@ -4,6 +4,7 @@
 //actors
 #include "Engine\GizmoGrid.h"
 #include "Engine\Mesh.h"
+#include "Engine\Plane.h"
 
 //lights
 #include "Engine\DirectionalLight.h"
@@ -62,7 +63,12 @@ void AddLevel_3dEnviroment(Game& game)
 	Mesh* bob = new Mesh();
 	bob->LoadOBJ("./data/models/f16.obj");
 	bob->LoadTextures("./data/textures/f16t.bmp", nullptr, nullptr);
+	//bob->SetPosition(vec3(3,0,-5));
 	enviroment.m_actors.push_back(bob);
+
+	Plane* phil = new Plane();
+	phil->Create(vec3(1));
+	enviroment.m_actors.push_back(phil);
 
 
 	/////lights///////

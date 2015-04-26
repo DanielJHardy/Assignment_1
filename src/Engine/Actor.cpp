@@ -7,6 +7,8 @@ Actor::Actor()
 	//setup as identity
 	m_worldTransform = mat4(1);
 	m_localTransform = mat4(1);
+
+	m_parent = nullptr;
 }
 
 Actor::~Actor()
@@ -65,7 +67,52 @@ bool Actor::getActive() const
 	return m_active;
 }
 
+//Transform functions
+
+void Actor::UpdateTransforms()
+{
+	if (m_parent == nullptr) //if has parent
+	{
+		m_worldTransform = m_localTransform;
+	}
+	else
+	{
+		m_worldTransform = m_parent->getWorldTransform() * m_localTransform;
+	}
+
+	//update childrens transforms aswell
+	for (unsigned int i = 0; i < m_children.size(); i++)
+	{
+		m_children[i]->UpdateTransforms();
+	}
+}
+
 void Actor::SetPosition(vec3 a_pos)
 {
-	m_worldTransform[3].xyz = a_pos;
+	m_localTransform[3].xyz = a_pos;
+}
+
+void Actor::Rotate(float a_angleD, vec3 a_axis)
+{
+	m_localTransform = glm::rotate(m_localTransform, a_angleD, a_axis);
+}
+
+void Actor::UpdateFamily(float a_dt)
+{
+	Update(a_dt);
+
+	for (unsigned int i = 0; i < m_children.size(); i++) //recursively update the entire family
+	{
+		m_children[i]->UpdateFamily(a_dt);
+	}
+}
+
+void Actor::DrawFamily()
+{
+	Draw();
+
+	for (unsigned int i = 0; i < m_children.size(); i++) //recursively Draw the entire family
+	{
+		m_children[i]->DrawFamily();
+	}
 }

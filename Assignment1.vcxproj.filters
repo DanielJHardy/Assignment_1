@@ -60,6 +60,9 @@
     <Filter Include="Resource Files\Shaders\lights\directional">
       <UniqueIdentifier>{daef8272-6b2a-4b7c-90cf-9647563f30d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Actors\Plane">
+      <UniqueIdentifier>{6416552e-50c4-4889-9df1-1f2411c3db80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\external\Gizmos.cpp">
@@ -103,6 +106,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\PointLight.cpp">
       <Filter>Source Files\Engine\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Plane.cpp">
+      <Filter>Source Files\Engine\Actors\Plane</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,11 +160,11 @@
     <ClInclude Include="src\Engine\Callbacks.h">
       <Filter>Source Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Plane.h">
+      <Filter>Source Files\Engine\Actors\Plane</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\shaders\gbuffer_fragment.glsl">
-      <Filter>Resource Files\Shaders\gbuffer</Filter>
-    </None>
     <None Include="data\shaders\gbuffer_vertex.glsl">
       <Filter>Resource Files\Shaders\gbuffer</Filter>
     </None>
@@ -176,6 +182,12 @@
     </None>
     <None Include="data\shaders\point_light_vertex.glsl">
       <Filter>Resource Files\Shaders\lights\point</Filter>
+    </None>
+    <None Include="data\shaders\g_frag_default.glsl">
+      <Filter>Resource Files\Shaders\gbuffer</Filter>
+    </None>
+    <None Include="data\shaders\g_frag_textured.glsl">
+      <Filter>Resource Files\Shaders\gbuffer</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -33,7 +33,7 @@ bool Level::Update(float a_dt)
 	//Update all the actors
 	for (unsigned int i = 0; i < m_actors.size(); i++)
 	{
-		m_actors[i]->Update(a_dt);
+		m_actors[i]->UpdateFamily(a_dt);
 	}
 
 	//update camera
@@ -48,7 +48,7 @@ void Level::Draw()
 	//Draw all actors
 	for (unsigned int i = 0; i < m_actors.size(); i++)
 	{
-		m_actors[i]->Draw();
+		m_actors[i]->DrawFamily();
 	}
 
 	Gizmos::draw(m_camera->getProjectionView());

@@ -13,7 +13,7 @@ void main()
 	vec4 albedo_sample = texture(albedo_tex, frag_texCoord);
 	vec4 light_sample = texture(light_tex, frag_texCoord);
 
-	out_color = albedo_sample * light_sample;
+	out_color = albedo_sample * max(vec4(0.02,0.02,0.02,1),light_sample);
 	//out_color = texture(normals_tex, frag_texCoord);
 	//out_color = texture(albedo_tex, frag_texCoord);
 }

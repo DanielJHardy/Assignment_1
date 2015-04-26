@@ -85,6 +85,7 @@
     <ClCompile Include="src\Engine\GizmoGrid.cpp" />
     <ClCompile Include="src\Engine\Level.cpp" />
     <ClCompile Include="src\Engine\Mesh.cpp" />
+    <ClCompile Include="src\Engine\Plane.cpp" />
     <ClCompile Include="src\Engine\PointLight.cpp" />
     <ClCompile Include="src\Engine\ShaderLoading.cpp" />
     <ClCompile Include="src\external\Gizmos.cpp" />
@@ -95,6 +96,7 @@
   <ItemGroup>
     <ClInclude Include="src\Engine\Callbacks.h" />
     <ClInclude Include="src\Engine\DirectionalLight.h" />
+    <ClInclude Include="src\Engine\Plane.h" />
     <ClInclude Include="src\Engine\PointLight.h" />
     <ClInclude Include="src\Engine\Mesh.h" />
     <ClInclude Include="src\Engine\Actor.h" />
@@ -114,8 +116,9 @@
     <None Include="data\shaders\composite_fragment.glsl" />
     <None Include="data\shaders\composite_vertex.glsl" />
     <None Include="data\shaders\directional_light_fragment.glsl" />
-    <None Include="data\shaders\gbuffer_fragment.glsl" />
+    <None Include="data\shaders\g_frag_textured.glsl" />
     <None Include="data\shaders\gbuffer_vertex.glsl" />
+    <None Include="data\shaders\g_frag_default.glsl" />
     <None Include="data\shaders\point_light_fragment.glsl" />
     <None Include="data\shaders\point_light_vertex.glsl" />
   </ItemGroup>

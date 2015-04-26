@@ -59,7 +59,7 @@ bool Game::Startup()
 	buildLightBuffer();
 
 	//load shaders
-	LoadShaders("./data/shaders/gbuffer_vertex.glsl","./data/shaders/gbuffer_fragment.glsl",0,&m_gbuffer_program);
+	LoadShaders("./data/shaders/gbuffer_vertex.glsl","./data/shaders/g_frag_textured.glsl",0,&m_gbuffer_program);
 	LoadShaders("./data/shaders/composite_vertex.glsl", "./data/shaders/composite_fragment.glsl", 0, &m_composite_program);
 	LoadShaders("./data/shaders/composite_vertex.glsl", "./data/shaders/directional_light_fragment.glsl", 0, &m_light_directional_program);
 	LoadShaders("./data/shaders/point_light_vertex.glsl", "./data/shaders/point_light_fragment.glsl", 0, &m_light_point_program);
@@ -125,7 +125,7 @@ bool Game::Update()
 	glfwSetTime(0.0);
 
 
-	TwAddVarRW(m_bar, "light Dir", TW_TYPE_DIR3F, &m_currentLevel.m_lights_directional[0], "");
+	//TwAddVarRW(m_bar, "light Dir", TW_TYPE_DIR3F, &m_currentLevel.m_lights_directional[0], "");
 
 
 

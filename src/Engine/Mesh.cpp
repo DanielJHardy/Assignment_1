@@ -8,8 +8,6 @@
 #include "..\external\gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
-#include <thread>
-
 #include "Game.h"
 
 Mesh::Mesh(){}
@@ -19,16 +17,22 @@ void Mesh::Update(float a_dt)
 {
 	if (glfwGetKey(Game::m_window, GLFW_KEY_UP) == GLFW_PRESS)
 	{
-		m_worldTransform[3] += vec4(3 * a_dt,0,0,0);
-	}
-	if (glfwGetKey(Game::m_window, GLFW_KEY_DOWN) == GLFW_PRESS)
-	{
-		m_worldTransform[3] += vec4(0, -3 * a_dt, 0, 0);
+		m_localTransform[3] += m_localTransform[0] * 10 * a_dt;
 	}
 	if (glfwGetKey(Game::m_window, GLFW_KEY_LEFT) == GLFW_PRESS)
 	{
-		m_worldTransform = glm::rotate(m_worldTransform, 10.0f * a_dt, vec3(0, 1, 0));
+		m_localTransform = glm::rotate(m_localTransform, 10.0f * a_dt, vec3(0, 1, 0));
 	}
+	if (glfwGetKey(Game::m_window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+	{
+		m_localTransform = glm::rotate(m_localTransform, -10.0f * a_dt, vec3(0, 1, 0));
+	}
+	if (glfwGetKey(Game::m_window, GLFW_KEY_DOWN) == GLFW_PRESS)
+	{
+		m_localTransform = glm::rotate(m_localTransform, -10.0f * a_dt, vec3(1, 0, 0));
+	}
+
+	UpdateTransforms();
 }
 
 void Mesh::Draw()
