@@ -3,6 +3,8 @@
 #include "..\external\gl_core_4_4.h"
 #include <GLFW\glfw3.h>
 
+#include "FileManager.h"
+
 #include "Game.h"
 
 struct VertexNormal
@@ -33,6 +35,18 @@ void Plane::Draw()
 		//world transform uniform
 		int world_uniform = glGetUniformLocation(Game::current_shader_program, "world");
 		glUniformMatrix4fv(world_uniform, 1, GL_FALSE, (float*)&m_worldTransform);
+
+		//set diffuse uniform if is 1 of type needing it
+		if (m_renderMode == RENDER_TYPE_DIFF || m_renderMode == RENDER_TYPE_DIFF_NORM)
+		{
+			//diffuse uniform
+			////set texture slot
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, m_texture_diffuse);
+
+			int diffuse_uniform = glGetUniformLocation(Game::current_shader_program, "diffuse");
+			glUniform1i(diffuse_uniform, 0); //0 is GL_TEXTURE0
+		}
 
 		glBindVertexArray(m_bData.m_VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -92,4 +106,32 @@ void Plane::Create(vec3 a_scale)
 	m_localTransform[0][0] = a_scale.x;
 	m_localTransform[1][1] = a_scale.y;
 	m_localTransform[2][2] = a_scale.z;
+}
+
+void Plane::LoadTextures(char* a_diff, char* a_norm, char* a_spec)
+{
+	//if has diffuse
+	if (a_diff != nullptr)
+	{
+		m_texture_diffuse = LoadTexture(a_diff);
+		m_renderMode = RENDER_TYPE_DIFF;
+	}
+	else
+		m_texture_diffuse = 0;
+
+	//if has normal
+	if (a_norm != nullptr)
+	{
+		m_texture_normal = LoadTexture(a_norm);
+		m_renderMode = RENDER_TYPE_DIFF_NORM;
+	}
+	else
+		m_texture_normal = 0;;
+
+
+	//if has specular
+	if (a_spec != nullptr)
+		m_texture_spec = LoadTexture(a_spec);
+	else
+		m_texture_spec = 0;
 }

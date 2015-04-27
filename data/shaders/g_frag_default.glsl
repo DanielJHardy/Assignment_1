@@ -13,5 +13,5 @@ void main()
 	position = viewspace_position.xyz;
 	normal = (viewspace_normal.xyz) * 0.5f + 0.5f;
 
-	albedo = vec3(1);
+	albedo = vec3(0.8f);
 }

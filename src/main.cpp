@@ -66,12 +66,13 @@ void AddLevel_3dEnviroment(Game& game)
 	//////Actors//////
 	Mesh* bob = new Mesh();
 	bob->LoadMeshData("./data/models/f16.obj");
-	bob->LoadTextures("./data/textures/f16C.bmp", nullptr, nullptr);
+	//bob->LoadTextures("./data/textures/f16C.bmp", nullptr, nullptr);
 	//bob->SetPosition(vec3(3,0,-5));
 	enviroment->AddActor(bob);
 
 	Plane* phil = new Plane();
 	phil->Create(vec3(1));
+	//phil->LoadTextures("./data/textures/f16C.bmp",nullptr,nullptr);
 	enviroment->AddActor(phil);
 
 

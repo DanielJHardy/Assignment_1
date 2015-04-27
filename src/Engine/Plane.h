@@ -12,9 +12,14 @@ public:
 	virtual void Draw();
 
 	void Create(vec3 a_scale);
+	void LoadTextures(char* a_diff, char* a_norm, char* a_spec);
 
 private:
 	bufferData m_bData;
+
+	unsigned int m_texture_diffuse;
+	unsigned int m_texture_normal;
+	unsigned int m_texture_spec;
 
 };
 
