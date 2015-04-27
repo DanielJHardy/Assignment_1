@@ -32,7 +32,7 @@ public:
 	void SetLevel(char* a_name);		   //// Sets the current level
 
 	//Note: first level added will be set as current level
-	unsigned int AddLevel(Level a_newLvl);				// 
+	unsigned int AddLevel(Level* a_newLvl);				// 
 	unsigned int RemoveLevel(unsigned int a_index);		// returns int for success/error
 	unsigned int RemoveLevel(char* a_name);				// 
 
@@ -56,26 +56,28 @@ public: //Variables
 	static GLFWwindow* m_window;
 
 	//shaders
-
-	static unsigned int m_g_program_default;
-	static unsigned int m_g_program_diff;
-	static unsigned int m_g_program_diff_norm;
-
+	static unsigned int current_shader_program;
 
 	//GUI
 	TwBar* m_bar;
+	std::vector<Level*> m_levels;
 
 private:
 
 	// Level
-	std::vector<Level> m_levels;
-	Level m_currentLevel;
+	
+	Level* m_currentLevel;
 	unsigned int m_levelIndex;
 
+	//shaders
 	unsigned int m_composite_program;
 
 	unsigned int m_light_directional_program;
 	unsigned int m_light_point_program;
+
+	unsigned int m_g_program_default;
+	unsigned int m_g_program_diff;
+	unsigned int m_g_program_diff_norm;
 
 	//g-buffer
 	unsigned int m_gbuffer_fbo;
@@ -87,9 +89,6 @@ private:
 	//lights
 	unsigned int m_light_fbo;
 	unsigned int m_light_texture;
-
-
-
 
 };
 

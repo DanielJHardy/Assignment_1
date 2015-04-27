@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "AntTweakBar.h"
+
 #include "Actor.h"
 #include "Camera.h"
 

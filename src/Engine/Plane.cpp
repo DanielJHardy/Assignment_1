@@ -31,7 +31,7 @@ void Plane::Draw()
 	if (m_active)
 	{
 		//world transform uniform
-		int world_uniform = glGetUniformLocation(Game::m_g_program_default, "world");
+		int world_uniform = glGetUniformLocation(Game::current_shader_program, "world");
 		glUniformMatrix4fv(world_uniform, 1, GL_FALSE, (float*)&m_worldTransform);
 
 		glBindVertexArray(m_bData.m_VAO);

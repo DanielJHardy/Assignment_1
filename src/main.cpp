@@ -44,10 +44,13 @@ int main()
 
 void AddLevel_3dEnviroment(Game& game)
 {
-	Level enviroment = Level();
+	//GUI
+	//TwBar* bar;
+
+	Level* enviroment = new Level();
 
 	//level name
-	enviroment.m_name = "3D enviroment";
+	enviroment->m_name = "3D enviroment";
 
 	//camera
 	FlyCam* cam = new FlyCam(glm::radians(60.0f));
@@ -58,30 +61,30 @@ void AddLevel_3dEnviroment(Game& game)
 
 	cam->setLookAt(vec3(0, 0, 1), vec3(0, 0, 0), vec3(0, 1, 0));
 
-	enviroment.m_camera = cam;
+	enviroment->m_camera = cam;
 
 	//////Actors//////
 	Mesh* bob = new Mesh();
 	bob->LoadMeshData("./data/models/f16.obj");
 	bob->LoadTextures("./data/textures/f16C.bmp", nullptr, nullptr);
 	//bob->SetPosition(vec3(3,0,-5));
-	enviroment.AddActor(bob);
+	enviroment->AddActor(bob);
 
 	Plane* phil = new Plane();
 	phil->Create(vec3(1));
-	enviroment.AddActor(phil);
+	enviroment->AddActor(phil);
 
 
 	/////lights///////
 	DirectionalLight dirLight = DirectionalLight(vec3(0, -1, 0), vec3(1, 1, 1));
-	enviroment.m_lights_directional.push_back(dirLight);
-
+	enviroment->m_lights_directional.push_back(dirLight);
+	
 
 	//PointLight blueLight = PointLight(vec3(0, 2, 3), vec3(0, 0, 1), 5);
-	//enviroment.m_lights_point.push_back(blueLight);
+	//enviroment->m_lights_point.push_back(blueLight);
 
+	TwAddVarRW(game.m_bar, "Light Dir", TW_TYPE_DIR3F, &enviroment->m_lights_directional[0].m_direction, "");
 
 	//add level
 	game.AddLevel(enviroment);
-
 }

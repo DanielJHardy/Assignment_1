@@ -14,9 +14,7 @@
 
 GLFWwindow* Game::m_window;
 
-unsigned int Game::m_g_program_default;
-unsigned int Game::m_g_program_diff;
-unsigned int Game::m_g_program_diff_norm;
+unsigned int Game::current_shader_program;
 
 Game::Game()
 {
@@ -74,13 +72,13 @@ bool Game::Startup()
 	LoadShaders("./data/shaders/point_light_vertex.glsl", "./data/shaders/point_light_fragment.glsl", 0, &m_light_point_program);
 
 	//LEVEL//------------------------//
-	m_levels = std::vector<Level>();
+	m_levels = std::vector<Level*>();
 
 	//set default level
-	Level newLvl = Level();
-	newLvl.m_name = "DEFAULT";
+	Level* newLvl = new Level();
+	newLvl->m_name = "DEFAULT";
 
-	newLvl.Startup();
+	newLvl->Startup();
 
 	//add default level and set as current level
 	m_levels.push_back(newLvl);
@@ -112,7 +110,7 @@ bool Game::Startup()
 void Game::Shutdown()
 {
 	//shutdown the level
-	m_currentLevel.Shutdown();
+	m_currentLevel->Shutdown();
 
 	//gui
 	TwDeleteAllBars();
@@ -134,12 +132,12 @@ bool Game::Update()
 	glfwSetTime(0.0);
 
 
-	//TwAddVarRW(m_bar, "light Dir", TW_TYPE_DIR3F, &m_currentLevel.m_lights_directional[0], "");
+	//TwAddVarRW(m_bar, "light Dir", TW_TYPE_DIR3F, &m_currentLevel->m_lights_directional[0], "");
 
 
 
 	//update level
-	m_currentLevel.Update(dt);
+	m_currentLevel->Update(dt);
 
 	return true;
 }
@@ -164,33 +162,36 @@ void Game::Draw()
 
 	//set gbuffer as current shader
 	glUseProgram(m_g_program_default); ////////////////////////////////////////////////////////////////////////////////////////////non textured
+	current_shader_program = m_g_program_default;
 
 	//set shader uniforms
 	int view_uniform = glGetUniformLocation(m_g_program_default, "view");
 	int view_proj_uniform = glGetUniformLocation(m_g_program_default, "view_proj");
 
-	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getView());	//view
-	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getProjectionView()); //ProjView
+	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getView());	//view
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getProjectionView()); //ProjView
 
 	//////draw scene///////																-<><><>- Objects
 	//draw level
-	m_currentLevel.Draw_default();
+	m_currentLevel->Draw_default();
 
 	//set gbuffer as current shader
 	glUseProgram(m_g_program_diff);	///////////////////////////////////////////////////////////////////////////////////////////// diffuse textured
+	current_shader_program = m_g_program_diff;
 
 	//set shader uniforms
 	view_uniform = glGetUniformLocation(m_g_program_diff, "view");
 	view_proj_uniform = glGetUniformLocation(m_g_program_diff, "view_proj");
 
-	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getView());	//view
-	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getProjectionView()); //ProjView
+	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getView());	//view
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getProjectionView()); //ProjView
 
 	//////draw scene///////																-<><><>- Objects
 	//draw level
-	m_currentLevel.Draw_diff();
+	m_currentLevel->Draw_diff();
 
-	//draw Gizmos
+
+	//draw Gizmos//////////////////////////////
 
 	///////////////////////<>
 	/////////////LIGHT BUFFER/////////////////////
@@ -226,7 +227,7 @@ void Game::Draw()
 	//// render directional lights													-<><><>- directional
 
 	//render all the directional lights in the scene
-	for each (DirectionalLight light in m_currentLevel.m_lights_directional)
+	for each (DirectionalLight light in m_currentLevel->m_lights_directional)
 	{
 		RenderDirectionalLight(light);
 	}
@@ -243,7 +244,7 @@ void Game::Draw()
 	position_tex_uniform = glGetUniformLocation(m_light_point_program, "position_texture");
 	normals_tex_uniform = glGetUniformLocation(m_light_point_program, "normal_texture");
 
-	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getProjectionView());
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getProjectionView());
 	glUniform1i(position_tex_uniform, 0);
 	glUniform1i(normals_tex_uniform, 1);
 
@@ -256,7 +257,7 @@ void Game::Draw()
 	//// render point lights														-<><><>- point
 
 	//render every point light in the current scene
-	for each (PointLight light in m_currentLevel.m_lights_point)
+	for each (PointLight light in m_currentLevel->m_lights_point)
 	{
 		RenderPointLight(light);
 	}
@@ -314,7 +315,7 @@ unsigned int Game::GetCurrentLevel() const
 
 char* Game::GetLevelName(unsigned int a_index) const
 {
-	return m_levels[a_index].m_name;
+	return m_levels[a_index]->m_name;
 }
 
 void Game::SetLevel(unsigned int a_index)
@@ -323,10 +324,10 @@ void Game::SetLevel(unsigned int a_index)
 	if (a_index < m_levels.size())
 	{
 		//if new level starts up
-		if (m_levels[a_index].Startup())
+		if (m_levels[a_index]->Startup())
 		{
 			//shutdown previous level
-			m_currentLevel.Shutdown();
+			m_currentLevel->Shutdown();
 
 			//start new level
 			m_levelIndex = a_index;
@@ -345,13 +346,13 @@ void Game::SetLevel(char* a_name)
 	for (unsigned int i = 0; i < m_levels.size(); i++)
 	{
 		//set level as current if it has the right name
-		if (m_levels[i].m_name == a_name)
+		if (m_levels[i]->m_name == a_name)
 		{
 			//if new level starts up
-			if (m_levels[i].Startup())
+			if (m_levels[i]->Startup())
 			{
 				//shutdown previous level
-				m_currentLevel.Shutdown();
+				m_currentLevel->Shutdown();
 
 				//start new level
 				m_levelIndex = i;
@@ -369,12 +370,12 @@ void Game::SetLevel(char* a_name)
 	printf("level name doest exist. level not set");
 }
 
-unsigned int Game::AddLevel(Level a_newLvl)
+unsigned int Game::AddLevel(Level* a_newLvl)
 {
 	//if there is only the dafault level, replace it
-	if (m_levels[0].m_name == "DEFAULT")
+	if (m_levels[0]->m_name == "DEFAULT")
 	{
-		m_currentLevel.Shutdown();
+		m_currentLevel->Shutdown();
 		m_levels.pop_back();
 
 	}
@@ -383,7 +384,7 @@ unsigned int Game::AddLevel(Level a_newLvl)
 		//dont add level if there is already a level with the same name
 		for (unsigned int i = 0; i < m_levels.size(); i++)
 		{
-			if (m_levels[i].m_name == a_newLvl.m_name)
+			if (m_levels[i]->m_name == a_newLvl->m_name)
 				return FAILURE;	//return failure
 		}
 	}
@@ -398,7 +399,7 @@ unsigned int Game::AddLevel(Level a_newLvl)
 		m_currentLevel = m_levels[0];
 
 		//startup level
-		m_currentLevel.Startup();
+		m_currentLevel->Startup();
 	}
 
 	//return success
@@ -424,13 +425,13 @@ unsigned int Game::RemoveLevel(unsigned int a_index)
 unsigned int Game::RemoveLevel(char* a_name)
 {
 	//restrict from removing current level
-	if (m_currentLevel.m_name == a_name)
+	if (m_currentLevel->m_name == a_name)
 		return FAILURE;
 
 	for (unsigned int i = 0; i < m_levels.size(); i++)
 	{
 		//if level found
-		if (m_levels[i].m_name == a_name)
+		if (m_levels[i]->m_name == a_name)
 		{
 			//set as current
 			m_levelIndex = i;
@@ -531,7 +532,7 @@ void Game::buildLightBuffer()
 
 void Game::RenderDirectionalLight(DirectionalLight a_light)
 {
-	vec4 viewspace_light_dir = m_currentLevel.m_camera->getView() * vec4(a_light.m_direction, 0);
+	vec4 viewspace_light_dir = m_currentLevel->m_camera->getView() * vec4(a_light.m_direction, 0);
 
 	int light_dir_uniform = glGetUniformLocation(m_light_directional_program, "light_dir");
 	int light_color_uniform = glGetUniformLocation(m_light_directional_program, "light_color");
@@ -545,7 +546,7 @@ void Game::RenderDirectionalLight(DirectionalLight a_light)
 
 void Game::RenderPointLight(PointLight a_light)
 {
-	vec4 view_space_pos = m_currentLevel.m_camera->getView() * vec4(a_light.m_pos, 1);
+	vec4 view_space_pos = m_currentLevel->m_camera->getView() * vec4(a_light.m_pos, 1);
 
 	int pos_uniform = glGetUniformLocation(m_light_point_program, "light_position");
 	int view_pos_uniform = glGetUniformLocation(m_light_point_program, "light_view_position");
