@@ -19,13 +19,23 @@ public:
 	void Shutdown();
 
 	bool Update(float a_dt);
-	void Draw();
+	void Draw_default();
+	void Draw_diff();
+	void Draw_diff_norm();
+
+	//actor functions
+	void AddActor(Actor* a_actor);	//adds actor to corresponding vector
+
 
 public:
-	std::vector<Actor*> m_actors;	//all the actors in the level
 	Camera* m_camera;
 
 	char* m_name;	//level title
+
+	//actor containers
+	std::vector<Actor*> m_actors_default;		//contains all actors with no texture info
+	std::vector<Actor*> m_actors_diff;			//contains all actors with a diffuse texture
+	std::vector<Actor*> m_actors_diff_norm;		//contains all actors with diffuse and normal textures
 
 	//Lighting
 

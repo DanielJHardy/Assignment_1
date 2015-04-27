@@ -4,6 +4,13 @@
 #include "glm_includes.h"
 #include <vector>
 
+enum RenderType
+{
+	RENDER_TYPE_DEFAULT,
+	RENDER_TYPE_DIFF,
+	RENDER_TYPE_DIFF_NORM
+};
+
 class Actor
 {
 public:
@@ -31,13 +38,20 @@ public:
 	void SetPosition(vec3 a_pos);
 	void Rotate(float a_angleD, vec3 a_axis);
 
+public:
+
 	//should be updated and drawn
 	bool m_active;
+
+	RenderType m_renderMode;
 
 protected:
 	//transforms
 	mat4 m_worldTransform;	//relative to worlds origin
 	mat4 m_localTransform;	//relative to parent (which is the same as world if there is no parent)
+
+
+protected:
 
 	virtual void Update(float a_dt);
 	virtual void Draw();

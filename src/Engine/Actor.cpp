@@ -9,6 +9,8 @@ Actor::Actor()
 	m_localTransform = mat4(1);
 
 	m_parent = nullptr;
+
+	m_renderMode = RENDER_TYPE_DEFAULT;
 }
 
 Actor::~Actor()

@@ -31,16 +31,8 @@ void Plane::Draw()
 	if (m_active)
 	{
 		//world transform uniform
-		int world_uniform = glGetUniformLocation(Game::m_gbuffer_program, "world");
+		int world_uniform = glGetUniformLocation(Game::m_g_program_default, "world");
 		glUniformMatrix4fv(world_uniform, 1, GL_FALSE, (float*)&m_worldTransform);
-
-		//diffuse uniform
-		////set texture slot
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, 5);
-
-		int diffuse_uniform = glGetUniformLocation(Game::m_gbuffer_program, "diffuse");
-		glUniform1i(diffuse_uniform, 0); //0 is GL_TEXTURE0
 
 		glBindVertexArray(m_bData.m_VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

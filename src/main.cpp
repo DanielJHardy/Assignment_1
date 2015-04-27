@@ -65,11 +65,11 @@ void AddLevel_3dEnviroment(Game& game)
 	bob->LoadMeshData("./data/models/f16.obj");
 	bob->LoadTextures("./data/textures/f16C.bmp", nullptr, nullptr);
 	//bob->SetPosition(vec3(3,0,-5));
-	enviroment.m_actors.push_back(bob);
+	enviroment.AddActor(bob);
 
 	Plane* phil = new Plane();
 	phil->Create(vec3(1));
-	bob->AddChild(phil);
+	enviroment.AddActor(phil);
 
 
 	/////lights///////

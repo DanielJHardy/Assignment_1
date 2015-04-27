@@ -13,7 +13,10 @@
 #define FAILURE 0;
 
 GLFWwindow* Game::m_window;
-unsigned int Game::m_gbuffer_program;
+
+unsigned int Game::m_g_program_default;
+unsigned int Game::m_g_program_diff;
+unsigned int Game::m_g_program_diff_norm;
 
 Game::Game()
 {
@@ -59,8 +62,14 @@ bool Game::Startup()
 	buildLightBuffer();
 
 	//load shaders
-	LoadShaders("./data/shaders/gbuffer_vertex.glsl","./data/shaders/g_frag_textured.glsl",0,&m_gbuffer_program);
+	//gbuffer programs
+	LoadShaders("./data/shaders/gbuffer_vertex.glsl","./data/shaders/g_frag_default.glsl",0,&m_g_program_default);
+	LoadShaders("./data/shaders/gbuffer_vertex.glsl", "./data/shaders/g_frag_textured.glsl", 0, &m_g_program_diff);
+
+	//composite
 	LoadShaders("./data/shaders/composite_vertex.glsl", "./data/shaders/composite_fragment.glsl", 0, &m_composite_program);
+
+	//light shaders
 	LoadShaders("./data/shaders/composite_vertex.glsl", "./data/shaders/directional_light_fragment.glsl", 0, &m_light_directional_program);
 	LoadShaders("./data/shaders/point_light_vertex.glsl", "./data/shaders/point_light_fragment.glsl", 0, &m_light_point_program);
 
@@ -154,19 +163,32 @@ void Game::Draw()
 	glClearBufferfv(GL_COLOR, 2, (float*)&clear_normal);
 
 	//set gbuffer as current shader
-	glUseProgram(m_gbuffer_program);
+	glUseProgram(m_g_program_default); ////////////////////////////////////////////////////////////////////////////////////////////non textured
 
 	//set shader uniforms
-	int view_uniform = glGetUniformLocation(m_gbuffer_program, "view");
-	int view_proj_uniform = glGetUniformLocation(m_gbuffer_program, "view_proj");
+	int view_uniform = glGetUniformLocation(m_g_program_default, "view");
+	int view_proj_uniform = glGetUniformLocation(m_g_program_default, "view_proj");
 
 	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getView());	//view
 	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getProjectionView()); //ProjView
 
 	//////draw scene///////																-<><><>- Objects
-
 	//draw level
-	m_currentLevel.Draw();
+	m_currentLevel.Draw_default();
+
+	//set gbuffer as current shader
+	glUseProgram(m_g_program_diff);	///////////////////////////////////////////////////////////////////////////////////////////// diffuse textured
+
+	//set shader uniforms
+	view_uniform = glGetUniformLocation(m_g_program_diff, "view");
+	view_proj_uniform = glGetUniformLocation(m_g_program_diff, "view_proj");
+
+	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getView());	//view
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel.m_camera->getProjectionView()); //ProjView
+
+	//////draw scene///////																-<><><>- Objects
+	//draw level
+	m_currentLevel.Draw_diff();
 
 	//draw Gizmos
 

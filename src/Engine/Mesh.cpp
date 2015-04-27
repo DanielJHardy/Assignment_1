@@ -9,7 +9,7 @@
 #include "Game.h"
 #include "FileManager.h"
 
-Mesh::Mesh(){}
+Mesh::Mesh(){ m_renderMode = RENDER_TYPE_DIFF; }
 Mesh::~Mesh(){}
 
 void Mesh::Update(float a_dt)
@@ -39,7 +39,7 @@ void Mesh::Draw()
 	if (m_active)
 	{
 		//world transform uniform
-		int world_uniform = glGetUniformLocation(Game::m_gbuffer_program, "world");
+		int world_uniform = glGetUniformLocation(Game::m_g_program_diff, "world");
 		glUniformMatrix4fv(world_uniform, 1, GL_FALSE, (float*)&m_worldTransform);
 
 		//diffuse uniform
@@ -47,7 +47,7 @@ void Mesh::Draw()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_texture_diffuse);
 
-		int diffuse_uniform = glGetUniformLocation(Game::m_gbuffer_program, "diffuse");
+		int diffuse_uniform = glGetUniformLocation(Game::m_g_program_diff, "diffuse");
 		glUniform1i(diffuse_uniform, 0); //0 is GL_TEXTURE0
 		
 		glBindVertexArray(m_bData.m_VAO);

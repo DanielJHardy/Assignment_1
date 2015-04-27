@@ -56,7 +56,11 @@ public: //Variables
 	static GLFWwindow* m_window;
 
 	//shaders
-	static unsigned int m_gbuffer_program;
+
+	static unsigned int m_g_program_default;
+	static unsigned int m_g_program_diff;
+	static unsigned int m_g_program_diff_norm;
+
 
 	//GUI
 	TwBar* m_bar;
