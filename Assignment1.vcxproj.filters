@@ -63,6 +63,9 @@
     <Filter Include="Source Files\Engine\Actors\Plane">
       <UniqueIdentifier>{6416552e-50c4-4889-9df1-1f2411c3db80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\File Loading">
+      <UniqueIdentifier>{ddc77264-6c9f-472e-951b-b56a9d0c1221}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\external\Gizmos.cpp">
@@ -109,6 +112,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\Plane.cpp">
       <Filter>Source Files\Engine\Actors\Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\FileManager.cpp">
+      <Filter>Source Files\Engine\File Loading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,6 +168,12 @@
     </ClInclude>
     <ClInclude Include="src\Engine\Plane.h">
       <Filter>Source Files\Engine\Actors\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\FileManager.h">
+      <Filter>Source Files\Engine\File Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Engine\bufferData.h">
+      <Filter>Source Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

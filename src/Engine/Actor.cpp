@@ -29,6 +29,7 @@ void Actor::Draw()
 //children functions
 void Actor::AddChild(Actor* a_child)
 {
+	a_child->m_parent = this;
 	m_children.push_back(a_child);
 }
 

@@ -51,6 +51,7 @@ void AddLevel_3dEnviroment(Game& game)
 
 	//camera
 	FlyCam* cam = new FlyCam(glm::radians(60.0f));
+	cam->m_speed = 6;
 
 	cam->centerX = (float)game.m_screenWidth / 2;
 	cam->centerY = (float)game.m_screenHeight / 2;
@@ -61,14 +62,14 @@ void AddLevel_3dEnviroment(Game& game)
 
 	//////Actors//////
 	Mesh* bob = new Mesh();
-	bob->LoadOBJ("./data/models/f16.obj");
-	bob->LoadTextures("./data/textures/f16t.bmp", nullptr, nullptr);
+	bob->LoadMeshData("./data/models/f16.obj");
+	bob->LoadTextures("./data/textures/f16C.bmp", nullptr, nullptr);
 	//bob->SetPosition(vec3(3,0,-5));
 	enviroment.m_actors.push_back(bob);
 
 	Plane* phil = new Plane();
 	phil->Create(vec3(1));
-	enviroment.m_actors.push_back(phil);
+	bob->AddChild(phil);
 
 
 	/////lights///////

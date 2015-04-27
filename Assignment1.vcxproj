@@ -80,6 +80,7 @@
     <ClCompile Include="src\Engine\Actor.cpp" />
     <ClCompile Include="src\Engine\Camera.cpp" />
     <ClCompile Include="src\Engine\DirectionalLight.cpp" />
+    <ClCompile Include="src\Engine\FileManager.cpp" />
     <ClCompile Include="src\Engine\FlyCam.cpp" />
     <ClCompile Include="src\Engine\Game.cpp" />
     <ClCompile Include="src\Engine\GizmoGrid.cpp" />
@@ -94,8 +95,10 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Engine\bufferData.h" />
     <ClInclude Include="src\Engine\Callbacks.h" />
     <ClInclude Include="src\Engine\DirectionalLight.h" />
+    <ClInclude Include="src\Engine\FileManager.h" />
     <ClInclude Include="src\Engine\Plane.h" />
     <ClInclude Include="src\Engine\PointLight.h" />
     <ClInclude Include="src\Engine\Mesh.h" />
