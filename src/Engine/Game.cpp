@@ -64,6 +64,8 @@ bool Game::Startup()
 	LoadShaders("./data/shaders/gbuffer_vertex.glsl","./data/shaders/g_frag_default.glsl",0,&m_g_program_default);
 	LoadShaders("./data/shaders/gbuffer_vertex.glsl", "./data/shaders/g_frag_textured.glsl", 0, &m_g_program_diff);
 
+	LoadShaders("./data/shaders/g_vert_terrain.glsl", "./data/shaders/g_frag_terrain.glsl", 0, &m_g_program_terrain);
+
 	//composite
 	LoadShaders("./data/shaders/composite_vertex.glsl", "./data/shaders/composite_fragment.glsl", 0, &m_composite_program);
 
@@ -131,11 +133,6 @@ bool Game::Update()
 	float dt = (float)glfwGetTime();
 	glfwSetTime(0.0);
 
-
-	//TwAddVarRW(m_bar, "light Dir", TW_TYPE_DIR3F, &m_currentLevel->m_lights_directional[0], "");
-
-
-
 	//update level
 	m_currentLevel->Update(dt);
 
@@ -189,6 +186,21 @@ void Game::Draw()
 	//////draw scene///////																-<><><>- Objects
 	//draw level
 	m_currentLevel->Draw_diff();
+
+	//set gbuffer as current shader
+	glUseProgram(m_g_program_terrain); ////////////////////////////////////////////////////////////////////////////////////////////Terrain
+	current_shader_program = m_g_program_terrain;
+
+	//set shader uniforms
+	view_uniform = glGetUniformLocation(m_g_program_terrain, "view");
+	view_proj_uniform = glGetUniformLocation(m_g_program_terrain, "view_proj");
+
+	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getView());	//view
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getProjectionView()); //ProjView
+
+	//////draw scene///////																-<><><>- Objects
+	//draw level
+	m_currentLevel->m_land.Draw();
 
 
 	//draw Gizmos//////////////////////////////

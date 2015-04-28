@@ -89,6 +89,7 @@
     <ClCompile Include="src\Engine\Plane.cpp" />
     <ClCompile Include="src\Engine\PointLight.cpp" />
     <ClCompile Include="src\Engine\ShaderLoading.cpp" />
+    <ClCompile Include="src\Engine\Terrain.cpp" />
     <ClCompile Include="src\external\Gizmos.cpp" />
     <ClCompile Include="src\external\gl_core_4_4.c" />
     <ClCompile Include="src\external\tiny_obj_loader.cc" />
@@ -110,6 +111,7 @@
     <ClInclude Include="src\Engine\glm_includes.h" />
     <ClInclude Include="src\Engine\Level.h" />
     <ClInclude Include="src\Engine\ShaderLoading.h" />
+    <ClInclude Include="src\Engine\Terrain.h" />
     <ClInclude Include="src\external\Gizmos.h" />
     <ClInclude Include="src\external\gl_core_4_4.h" />
     <ClInclude Include="src\external\stb_image.h" />
@@ -119,11 +121,15 @@
     <None Include="data\shaders\composite_fragment.glsl" />
     <None Include="data\shaders\composite_vertex.glsl" />
     <None Include="data\shaders\directional_light_fragment.glsl" />
+    <None Include="data\shaders\g_frag_terrain.glsl" />
     <None Include="data\shaders\g_frag_textured.glsl" />
     <None Include="data\shaders\gbuffer_vertex.glsl" />
     <None Include="data\shaders\g_frag_default.glsl" />
     <None Include="data\shaders\point_light_fragment.glsl" />
     <None Include="data\shaders\point_light_vertex.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\shaders\g_vert_terrain.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

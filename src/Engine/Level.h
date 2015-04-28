@@ -8,6 +8,8 @@
 #include "Actor.h"
 #include "Camera.h"
 
+#include "Terrain.h"
+
 #include "DirectionalLight.h"
 #include "PointLight.h"
 
@@ -48,6 +50,9 @@ public:
 	//light instances
 	std::vector<PointLight> m_lights_point;
 	std::vector<DirectionalLight> m_lights_directional;
+
+	//terrain
+	Terrain m_land;
 
 };
 

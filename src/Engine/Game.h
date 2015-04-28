@@ -79,6 +79,8 @@ private:
 	unsigned int m_g_program_diff;
 	unsigned int m_g_program_diff_norm;
 
+	unsigned int m_g_program_terrain;
+
 	//g-buffer
 	unsigned int m_gbuffer_fbo;
 	unsigned int m_albedo_texture;

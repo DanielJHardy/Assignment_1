@@ -66,6 +66,12 @@
     <Filter Include="Source Files\Engine\File Loading">
       <UniqueIdentifier>{ddc77264-6c9f-472e-951b-b56a9d0c1221}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Terrain">
+      <UniqueIdentifier>{7cd0e08f-ce99-412e-b4f2-8085f78c96cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Shaders\gbuffer\terrain">
+      <UniqueIdentifier>{dc51ea80-030a-4675-82f5-1096014398ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\external\Gizmos.cpp">
@@ -115,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="src\Engine\FileManager.cpp">
       <Filter>Source Files\Engine\File Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Engine\Terrain.cpp">
+      <Filter>Source Files\Engine\Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +184,9 @@
     <ClInclude Include="src\Engine\bufferData.h">
       <Filter>Source Files\Utility</Filter>
     </ClInclude>
+    <ClInclude Include="src\Engine\Terrain.h">
+      <Filter>Source Files\Engine\Terrain</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\shaders\gbuffer_vertex.glsl">
@@ -201,5 +213,13 @@
     <None Include="data\shaders\g_frag_textured.glsl">
       <Filter>Resource Files\Shaders\gbuffer</Filter>
     </None>
+    <None Include="data\shaders\g_frag_terrain.glsl">
+      <Filter>Resource Files\Shaders\gbuffer\terrain</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\shaders\g_vert_terrain.glsl">
+      <Filter>Resource Files\Shaders\gbuffer\terrain</Filter>
+    </Text>
   </ItemGroup>
 </Project>

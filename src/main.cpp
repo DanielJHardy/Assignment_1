@@ -66,19 +66,24 @@ void AddLevel_3dEnviroment(Game& game)
 	//////Actors//////
 	Mesh* bob = new Mesh();
 	bob->LoadMeshData("./data/models/f16.obj");
-	//bob->LoadTextures("./data/textures/f16C.bmp", nullptr, nullptr);
+	bob->LoadTextures("./data/textures/f16C.bmp", nullptr, nullptr);
 	//bob->SetPosition(vec3(3,0,-5));
 	enviroment->AddActor(bob);
 
-	Plane* phil = new Plane();
-	phil->Create(vec3(1));
-	//phil->LoadTextures("./data/textures/f16C.bmp",nullptr,nullptr);
-	enviroment->AddActor(phil);
+	//Plane* phil = new Plane();
+	//phil->Create(vec3(1));
+	////phil->LoadTextures("./data/textures/f16C.bmp",nullptr,nullptr);
+	//enviroment->AddActor(phil);
 
 
 	/////lights///////
 	DirectionalLight dirLight = DirectionalLight(vec3(0, -1, 0), vec3(1, 1, 1));
 	enviroment->m_lights_directional.push_back(dirLight);
+
+	//terrain
+	enviroment->m_land = Terrain();
+	enviroment->m_land.BuildGrid(vec2(100,100), glm::ivec2(64,64));
+	enviroment->m_land.BuildPerlinTexture(glm::ivec2(64,64));
 	
 
 	//PointLight blueLight = PointLight(vec3(0, 2, 3), vec3(0, 0, 1), 5);
