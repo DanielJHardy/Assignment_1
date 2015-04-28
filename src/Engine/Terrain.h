@@ -13,6 +13,14 @@ public:
 	void BuildGrid(vec2 a_worldSize, glm::ivec2 a_gridSize);
 	void BuildPerlinTexture(glm::ivec2 a_gridSize);
 
+	void LoadTextures(char* a_grass, char* a_stone);
+
+public:
+	float max_height;
+
+	unsigned int m_texture_grass;
+	unsigned int m_texture_stone;
+
 private:
 	glm::ivec2 m_gridSize;
 

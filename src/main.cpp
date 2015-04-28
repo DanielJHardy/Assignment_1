@@ -82,8 +82,10 @@ void AddLevel_3dEnviroment(Game& game)
 
 	//terrain
 	enviroment->m_land = Terrain();
-	enviroment->m_land.BuildGrid(vec2(100,100), glm::ivec2(64,64));
-	enviroment->m_land.BuildPerlinTexture(glm::ivec2(64,64));
+	enviroment->m_land.BuildGrid(vec2(100,100), glm::ivec2(100,100));
+	enviroment->m_land.BuildPerlinTexture(glm::ivec2(1000,100));
+
+	enviroment->m_land.LoadTextures("./data/textures/grass/DIFFUSE.jpg","./data/textures/rock/DIFFUSE.jpg");
 	
 
 	//PointLight blueLight = PointLight(vec3(0, 2, 3), vec3(0, 0, 1), 5);

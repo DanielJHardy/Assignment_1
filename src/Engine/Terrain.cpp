@@ -5,6 +5,8 @@
 
 #include "Game.h"
 
+#include "FileManager.h"
+
 struct terrain_vertex
 {
 	vec4 position;
@@ -14,17 +16,21 @@ struct terrain_vertex
 Terrain::Terrain()
 {
 	m_mesh = bufferData();
+	max_height = 10;
+
+	m_texture_grass = 0;
+	m_texture_stone = 0;
 }
 
 void Terrain::Draw()
 {
 	//diffuse uniform
 	////set texture slot
-	glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, m_texture_perlin);
 
 	int diffuse_uniform = glGetUniformLocation(Game::current_shader_program, "perlin_texture");
-	glUniform1i(diffuse_uniform, 0); //0 is GL_TEXTURE0
+	glUniform1i(diffuse_uniform, 3); //0 is GL_TEXTURE0
 
 	glBindVertexArray(m_mesh.m_VAO);
 	glDrawElements(GL_TRIANGLES, m_mesh.m_indexCount, GL_UNSIGNED_INT, 0);
@@ -126,15 +132,15 @@ void Terrain::BuildPerlinTexture(glm::ivec2 a_gridSize)
 	int dims = a_gridSize.x; 
 	float *perlin_data = new float[dims * dims]; 
 	float scale = (1.0f / dims) * 3; 
-	int octaves = 6;
+	int octaves = 8;
 
-	for (int x = 0; x < 64; ++x) 
+	for (int x = 0; x < dims; ++x)
 	{ 
-		for (int y = 0; y < 64; ++y)     
+		for (int y = 0; y < dims; ++y)
 		{ 
 			float amplitude = 1.0f;
 			float persistence = 0.3f;
-			perlin_data[y* dims + x] = glm::perlin(vec2(x, y) * scale) * 0.5f + 0.5f; 
+			perlin_data[y* dims + x] = glm::perlin(vec2(x, y) * scale) * 0.5f + 0.5f;
 
 			for (int o = 0; o < octaves; ++o)  
 			{ 
@@ -150,9 +156,15 @@ void Terrain::BuildPerlinTexture(glm::ivec2 a_gridSize)
 	glGenTextures(1, &m_texture_perlin);
 	
 	glBindTexture(GL_TEXTURE_2D, m_texture_perlin);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, 64, 64, 0, GL_RED, GL_FLOAT, perlin_data);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, dims, dims, 0, GL_RED, GL_FLOAT, perlin_data);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
+}
+
+void Terrain::LoadTextures(char* a_grass, char* a_stone)
+{
+	m_texture_grass = LoadTexture(a_grass);
+	m_texture_stone = LoadTexture(a_stone);
 }

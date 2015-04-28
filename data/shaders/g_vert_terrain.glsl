@@ -8,6 +8,8 @@ uniform mat4 view_proj;
 
 uniform sampler2D perlin_texture; 
 
+uniform float max_height;
+
 out vec4 viewspace_position;
 out vec4 viewspace_normal;
 out vec2 vTexCoord;  
@@ -20,8 +22,7 @@ void main()
 	viewspace_normal = view * vec4(0, 1, 0, 0); //not using atm
 
 	vec4 pos = position;
-	pos.y += texture(perlin_texture, texcoord).r * (texture(perlin_texture, texcoord).r * 10);
-	pos.y -= 20;
+	pos.y += texture(perlin_texture, texcoord).r * max_height;
 	 
 	gl_Position = view_proj * pos; 
 }

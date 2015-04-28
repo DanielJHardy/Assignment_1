@@ -198,6 +198,25 @@ void Game::Draw()
 	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getView());	//view
 	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getProjectionView()); //ProjView
 
+	int maxHeight_uniform = glGetUniformLocation(m_g_program_terrain, "max_height");
+	glUniform1f(maxHeight_uniform, m_currentLevel->m_land.max_height);
+
+
+	//diffuse uniform
+	////set texture slot
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_currentLevel->m_land.m_texture_grass);
+
+	int grass_uniform = glGetUniformLocation(m_g_program_terrain, "texture_grass");
+	glUniform1i(grass_uniform, 0); 
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_currentLevel->m_land.m_texture_stone);
+
+	int stone_uniform = glGetUniformLocation(m_g_program_terrain, "texture_stone");
+	glUniform1i(stone_uniform, 1);
+
+
 	//////draw scene///////																-<><><>- Objects
 	//draw level
 	m_currentLevel->m_land.Draw();
