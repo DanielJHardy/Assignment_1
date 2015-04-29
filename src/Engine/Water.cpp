@@ -22,28 +22,45 @@ Water::Water()
 	m_texture_displacement = 0;
 
 	m_worldTransform = mat4(1);
+
+	m_active = true;
 }
 
 void Water::Update(float a_dt)
 {
-	//update running time
-	m_time += a_dt;
+	if (m_active)
+	{
+		//update running time
+		m_time += a_dt;
+	}
 }
 
 void Water::Draw()
 {
-	//diffuse uniform
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_texture_diffuse);
+	if (m_active)
+	{
 
-	int uniform_location = glGetUniformLocation(Game::current_shader_program, "diffuse");
-	glUniform1i(uniform_location, 0);
+		//diffuse uniform
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, m_texture_diffuse);
 
+		int uniform_location = glGetUniformLocation(Game::current_shader_program, "diffuse");
+		glUniform1i(uniform_location, 0);
 
+		//displacement uniform
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, m_texture_displacement);
 
+		uniform_location = glGetUniformLocation(Game::current_shader_program, "displacement");
+		glUniform1i(uniform_location, 1);
 
-	glBindVertexArray(m_mesh.m_VAO);
-	glDrawElements(GL_TRIANGLES, m_mesh.m_indexCount, GL_UNSIGNED_INT, 0);
+		//time uniform
+		uniform_location = glGetUniformLocation(Game::current_shader_program, "Time");
+		glUniform1f(uniform_location, m_time);
+
+		glBindVertexArray(m_mesh.m_VAO);
+		glDrawElements(GL_TRIANGLES, m_mesh.m_indexCount, GL_UNSIGNED_INT, 0);
+	}
 }
 
 void Water::Create(vec2 a_size)

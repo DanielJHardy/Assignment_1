@@ -18,6 +18,8 @@ public:
 	////////////////////////////
 	mat4 m_worldTransform;
 
+	bool m_active;
+
 private:
 	bufferData m_mesh;
 
@@ -26,6 +28,7 @@ private:
 	unsigned int m_texture_displacement;
 
 	float m_time;
+
 };
 
 #endif // !_WATER_H_

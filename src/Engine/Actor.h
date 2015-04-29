@@ -37,6 +37,7 @@ public:
 
 	void SetPosition(vec3 a_pos);
 	void Rotate(float a_angleD, vec3 a_axis);
+	void SetScale(vec3 a_scale);
 
 public:
 

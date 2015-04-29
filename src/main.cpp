@@ -62,7 +62,7 @@ void AddLevel_3dEnviroment(Game& game)
 	//water
 	enviroment->m_water = Water();
 	enviroment->m_water.Create(vec2(100,100));
-	enviroment->m_water.LoadTextures("./data/textures/water/DIFFUSE.jpg","./data/textures/grass/DIFFUSE.jpg");
+	enviroment->m_water.LoadTextures("./data/textures/water/DIFFUSE.jpg","./data/textures/water/DISPLACE.jpg");
 
 	float above_terrain = enviroment->m_land.max_height + 2;
 
@@ -79,20 +79,29 @@ void AddLevel_3dEnviroment(Game& game)
 
 
 	//////Actors//////
-	//Plane* water = new Plane();
-	//water->Create(vec3(50));
-	//water->LoadTextures("./data/textures/water/DIFFUSE.jpg",nullptr,nullptr);
-	//water->SetPosition(vec3(0,-2,0));
-	//enviroment->AddActor(water);
-
 
 	Mesh* bob = new Mesh();
 	bob->LoadMeshData("./data/models/f16.obj");
 	bob->LoadTextures("./data/textures/f16C.bmp", nullptr, nullptr);
 	bob->SetPosition(vec3(0, above_terrain, 0));
+	bob->SetScale(vec3(2,2,2));
 	enviroment->AddActor(bob);
 
-	
+	bob = new Mesh();
+	bob->LoadMeshData("./data/models/f16.obj");
+	bob->LoadTextures("./data/textures/wood.jpg", nullptr, nullptr);
+	bob->SetPosition(vec3(10, above_terrain, 0));
+	bob->SetScale(vec3(0.5f, 0.5f, 0.5f));
+	enviroment->AddActor(bob);
+
+
+
+	//canoe
+	//bob = new Mesh();
+	//bob->SetPosition(vec3(0,1.2f,10));
+	//bob->LoadMeshData("./data/models/Canoe.obj");
+	//bob->LoadTextures("./data/textures/wood.jpg", 0, 0);
+	//enviroment->AddActor(bob);
 
 
 	/////lights///////
@@ -113,6 +122,7 @@ void AddLevel_3dEnviroment(Game& game)
 	TwAddSeparator(game.m_bar, "water props", "");
 	TwAddButton(game.m_bar, "comment2", NULL, NULL, " label='Water Properties' ");
 	//
+	TwAddVarRW(game.m_bar, "water_active",TW_TYPE_BOOL8, &enviroment->m_water.m_active, "label='Active'");
 	//
 	TwAddSeparator(game.m_bar, "buttons", "");
 	//

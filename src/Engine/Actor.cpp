@@ -119,3 +119,11 @@ void Actor::DrawFamily()
 		m_children[i]->DrawFamily();
 	}
 }
+
+void Actor::SetScale(vec3 a_scale)
+{
+	m_localTransform[0][0] = a_scale.x;
+	m_localTransform[1][1] = a_scale.y;
+	m_localTransform[2][2] = a_scale.z;
+	
+}

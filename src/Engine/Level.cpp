@@ -51,6 +51,9 @@ bool Level::Update(float a_dt)
 	//update camera
 	m_camera->Update(a_dt);
 
+	//update water
+	m_water.Update(a_dt);
+
 
 	return true;
 }
