@@ -80,6 +80,7 @@ private:
 	unsigned int m_g_program_diff_norm;
 
 	unsigned int m_g_program_terrain;
+	unsigned int m_g_program_water;
 
 	//g-buffer
 	unsigned int m_gbuffer_fbo;

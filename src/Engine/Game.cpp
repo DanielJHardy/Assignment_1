@@ -65,6 +65,8 @@ bool Game::Startup()
 	LoadShaders("./data/shaders/gbuffer_vertex.glsl", "./data/shaders/g_frag_textured.glsl", 0, &m_g_program_diff);
 
 	LoadShaders("./data/shaders/g_vert_terrain.glsl", "./data/shaders/g_frag_terrain.glsl", 0, &m_g_program_terrain);
+	LoadShaders("./data/shaders/g_vert_water.glsl", "./data/shaders/g_frag_water.glsl", 0, &m_g_program_water);
+
 
 	//composite
 	LoadShaders("./data/shaders/composite_vertex.glsl", "./data/shaders/composite_fragment.glsl", 0, &m_composite_program);
@@ -201,7 +203,6 @@ void Game::Draw()
 	int maxHeight_uniform = glGetUniformLocation(m_g_program_terrain, "max_height");
 	glUniform1f(maxHeight_uniform, m_currentLevel->m_land.max_height);
 
-
 	//diffuse uniform
 	////set texture slot
 	glActiveTexture(GL_TEXTURE0);
@@ -216,10 +217,24 @@ void Game::Draw()
 	int stone_uniform = glGetUniformLocation(m_g_program_terrain, "texture_stone");
 	glUniform1i(stone_uniform, 1);
 
-
 	//////draw scene///////																-<><><>- Objects
 	//draw level
 	m_currentLevel->m_land.Draw();
+
+	//////////////////////////////////////water//////////////////////////////////////////////////
+	glUseProgram(m_g_program_water);
+	current_shader_program = m_g_program_water;
+
+	//shader uniforms
+	view_uniform = glGetUniformLocation(m_g_program_water, "view");
+	view_proj_uniform = glGetUniformLocation(m_g_program_water, "view_proj");
+
+	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getView());	//view
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getProjectionView()); //ProjView
+
+	//draw
+	m_currentLevel->m_water.Draw();
+
 
 
 	//draw Gizmos//////////////////////////////

@@ -9,6 +9,7 @@
 #include "Camera.h"
 
 #include "Terrain.h"
+#include "Water.h"
 
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -54,6 +55,8 @@ public:
 	//terrain
 	Terrain m_land;
 
+	//water
+	Water m_water;
 };
 
 #endif // !_LEVEL_H_

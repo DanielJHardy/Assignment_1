@@ -59,6 +59,11 @@ void AddLevel_3dEnviroment(Game& game)
 	enviroment->m_land.BuildPerlinTexture();
 	enviroment->m_land.LoadTextures("./data/textures/grass/DIFFUSE.jpg", "./data/textures/rock/DIFFUSE.jpg");
 
+	//water
+	enviroment->m_water = Water();
+	enviroment->m_water.Create(vec2(100,100));
+	enviroment->m_water.LoadTextures("./data/textures/water/DIFFUSE.jpg","./data/textures/grass/DIFFUSE.jpg");
+
 	float above_terrain = enviroment->m_land.max_height + 2;
 
 	//camera
@@ -74,11 +79,11 @@ void AddLevel_3dEnviroment(Game& game)
 
 
 	//////Actors//////
-	Plane* water = new Plane();
-	water->Create(vec3(50));
-	water->LoadTextures("./data/textures/water/DIFFUSE.jpg",nullptr,nullptr);
-	water->SetPosition(vec3(0,-2,0));
-	enviroment->AddActor(water);
+	//Plane* water = new Plane();
+	//water->Create(vec3(50));
+	//water->LoadTextures("./data/textures/water/DIFFUSE.jpg",nullptr,nullptr);
+	//water->SetPosition(vec3(0,-2,0));
+	//enviroment->AddActor(water);
 
 
 	Mesh* bob = new Mesh();
@@ -108,7 +113,6 @@ void AddLevel_3dEnviroment(Game& game)
 	TwAddSeparator(game.m_bar, "water props", "");
 	TwAddButton(game.m_bar, "comment2", NULL, NULL, " label='Water Properties' ");
 	//
-	TwAddVarRW(game.m_bar, "water_Active", TW_TYPE_INT16, &water->m_active, "label='Active'");
 	//
 	TwAddSeparator(game.m_bar, "buttons", "");
 	//
