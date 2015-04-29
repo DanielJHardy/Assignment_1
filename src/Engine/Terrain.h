@@ -10,14 +10,20 @@ public:
 
 	void Draw();
 
-	void BuildGrid(vec2 a_worldSize, glm::ivec2 a_gridSize);
-	void BuildPerlinTexture(glm::ivec2 a_gridSize);
+	void BuildGrid();
+	void BuildPerlinTexture();
 
 	void LoadTextures(char* a_grass, char* a_stone);
 
 public:
+	//terrain gen modifiable properties
 	float max_height;
+	vec3 worldSize;
+	int gridSize;
+	float bumpiness;
+	int octaves;
 
+	//terxtures
 	unsigned int m_texture_grass;
 	unsigned int m_texture_stone;
 

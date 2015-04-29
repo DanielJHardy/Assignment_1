@@ -16,7 +16,14 @@ struct terrain_vertex
 Terrain::Terrain()
 {
 	m_mesh = bufferData();
-	max_height = 10;
+
+	//default terrain settings
+	max_height = 5;
+	worldSize = vec3(100, 100, 0);
+	gridSize = 64;
+	bumpiness = 1.0f;
+	octaves = 6;
+
 
 	m_texture_grass = 0;
 	m_texture_stone = 0;
@@ -37,11 +44,11 @@ void Terrain::Draw()
 }
 
 
-void Terrain::BuildGrid(vec2 a_worldSize, glm::ivec2 a_gridSize)
+void Terrain::BuildGrid()
 {
 	//	This function generates the grid we will use for the height map
-	//	a_worldSize is the real world dimensions of the grid
-	//	a_gridSize is the number of rows and columns
+	//	worldSize is the real world dimensions of the grid
+	//	gridSize is the number of rows and columns
 
 	if (m_mesh.m_indexCount > 0)
 	{
@@ -51,44 +58,44 @@ void Terrain::BuildGrid(vec2 a_worldSize, glm::ivec2 a_gridSize)
 		glDeleteBuffers(1, &m_mesh.m_IBO);
 	}
 	//	compute how many vertices we need
-	unsigned int iVertexCount = (a_gridSize.x + 1) * (a_gridSize.y + 1);
+	unsigned int iVertexCount = (gridSize + 1) * (gridSize + 1);
 	//	allocate vertex data
 	terrain_vertex*	vertexData = new terrain_vertex[iVertexCount];
 
 	//	compute how many indices we need
-	unsigned int iIndexCount = a_gridSize.x * a_gridSize.y * 6;
+	unsigned int iIndexCount = gridSize * gridSize * 6;
 	//	allocate index data
 	unsigned int* indexData = new unsigned int[iIndexCount];
 
 	//	two nested for loops to generate vertex data
-	float fCurrY = -a_worldSize.y * 0.5f;
-	for (int y = 0; y < a_gridSize.y + 1; ++y)
+	float fCurrY = -worldSize.y * 0.5f;
+	for (int y = 0; y < gridSize + 1; ++y)
 	{
-		float fCurrX = -a_worldSize.x * 0.5f;
-		for (int x = 0; x < a_gridSize.x + 1; ++x)
+		float fCurrX = -worldSize.x * 0.5f;
+		for (int x = 0; x < gridSize + 1; ++x)
 		{
 			//	inside we create our points, with the grid centred at (0, 0)
-			vertexData[y * (a_gridSize.x + 1) + x].position = vec4(fCurrX, 0, fCurrY, 1);
-			vertexData[y * (a_gridSize.x + 1) + x].tex_coord = vec2((float)x / (float)a_gridSize.x, (float)y / (float)a_gridSize.y);
-			fCurrX += a_worldSize.x / (float)a_gridSize.x;
+			vertexData[y * (gridSize + 1) + x].position = vec4(fCurrX, 0, fCurrY, 1);
+			vertexData[y * (gridSize + 1) + x].tex_coord = vec2((float)x / (float)gridSize, (float)y / (float)gridSize);
+			fCurrX += worldSize.x / (float)gridSize;
 		}
-		fCurrY += a_worldSize.y / (float)a_gridSize.y;
+		fCurrY += worldSize.y / (float)gridSize;
 	}
 
 	//	two nested for loops to generate index data
 	int	iCurrIndex = 0;
-	for (int y = 0; y < a_gridSize.y; ++y)
+	for (int y = 0; y < gridSize; ++y)
 	{
-		for (int x = 0; x < a_gridSize.x; ++x)
+		for (int x = 0; x < gridSize; ++x)
 		{
 			//	create our 6 indices here!!
-			indexData[iCurrIndex++] = y * (a_gridSize.x + 1) + x;
-			indexData[iCurrIndex++] = (y + 1) * (a_gridSize.x + 1) + x;
-			indexData[iCurrIndex++] = (y + 1) * (a_gridSize.x + 1) + x + 1;
+			indexData[iCurrIndex++] = y * (gridSize + 1) + x;
+			indexData[iCurrIndex++] = (y + 1) * (gridSize + 1) + x;
+			indexData[iCurrIndex++] = (y + 1) * (gridSize + 1) + x + 1;
 
-			indexData[iCurrIndex++] = (y + 1) * (a_gridSize.x + 1) + x + 1;
-			indexData[iCurrIndex++] = y * (a_gridSize.x + 1) + x + 1;
-			indexData[iCurrIndex++] = y * (a_gridSize.x + 1) + x;
+			indexData[iCurrIndex++] = (y + 1) * (gridSize + 1) + x + 1;
+			indexData[iCurrIndex++] = y * (gridSize + 1) + x + 1;
+			indexData[iCurrIndex++] = y * (gridSize + 1) + x;
 		}
 	}
 
@@ -124,15 +131,14 @@ void Terrain::BuildGrid(vec2 a_worldSize, glm::ivec2 a_gridSize)
 	delete[] indexData;
 }
 
-void Terrain::BuildPerlinTexture(glm::ivec2 a_gridSize)
+void Terrain::BuildPerlinTexture()
 {
 
-	//float* perlin_data = new float[a_gridSize.x * a_gridSize.y];
+	//float* perlin_data = new float[gridSize * gridSize];
 	
-	int dims = a_gridSize.x; 
+	int dims = gridSize;
 	float *perlin_data = new float[dims * dims]; 
-	float scale = (1.0f / dims) * 3; 
-	int octaves = 8;
+	float scale = (bumpiness / dims) * 3; 
 
 	for (int x = 0; x < dims; ++x)
 	{ 
