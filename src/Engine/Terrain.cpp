@@ -11,6 +11,7 @@ struct terrain_vertex
 {
 	vec4 position;
 	vec2 tex_coord;
+	//vec4 normal;
 };
 
 Terrain::Terrain()
@@ -24,6 +25,7 @@ Terrain::Terrain()
 	bumpiness = 1.0f;
 	octaves = 6;
 
+	perlin_data = 0;
 
 	m_texture_grass = 0;
 	m_texture_stone = 0;
@@ -31,8 +33,22 @@ Terrain::Terrain()
 
 void Terrain::Draw()
 {
-	//diffuse uniform
-	////set texture slot
+
+	//grass
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_texture_grass);
+
+	int grass_uniform = glGetUniformLocation(Game::current_shader_program, "texture_grass");
+	glUniform1i(grass_uniform, 0);
+
+	//stone
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_texture_stone);
+
+	int stone_uniform = glGetUniformLocation(Game::current_shader_program, "texture_stone");
+	glUniform1i(stone_uniform, 1);
+
+	//perlin
 	glActiveTexture(GL_TEXTURE3);
 	glBindTexture(GL_TEXTURE_2D, m_texture_perlin);
 
@@ -75,8 +91,10 @@ void Terrain::BuildGrid()
 		for (int x = 0; x < gridSize + 1; ++x)
 		{
 			//	inside we create our points, with the grid centred at (0, 0)
+
 			vertexData[y * (gridSize + 1) + x].position = vec4(fCurrX, 0, fCurrY, 1);
 			vertexData[y * (gridSize + 1) + x].tex_coord = vec2((float)x / (float)gridSize, (float)y / (float)gridSize);
+
 			fCurrX += worldSize.x / (float)gridSize;
 		}
 		fCurrY += worldSize.y / (float)gridSize;
@@ -89,7 +107,7 @@ void Terrain::BuildGrid()
 		for (int x = 0; x < gridSize; ++x)
 		{
 			//	create our 6 indices here!!
-			indexData[iCurrIndex++] = y * (gridSize + 1) + x;
+			indexData[iCurrIndex++] = y * (gridSize + 1) + x; 
 			indexData[iCurrIndex++] = (y + 1) * (gridSize + 1) + x;
 			indexData[iCurrIndex++] = (y + 1) * (gridSize + 1) + x + 1;
 
@@ -98,6 +116,28 @@ void Terrain::BuildGrid()
 			indexData[iCurrIndex++] = y * (gridSize + 1) + x;
 		}
 	}
+
+	////generate normals
+	//for (int i = 0; i < iIndexCount; i += 3)
+	//{
+	//	vec3 v1 = vertexData[indexData[i]].position.xyz;
+	//	vec3 v2 = vertexData[indexData[i + 1]].position.xyz;
+	//	vec3 v3 = vertexData[indexData[i + 2]].position.xyz;
+	//	vec3 d1 = v2 - v1;
+	//	vec3 d2 = v3 - v1;
+	//	
+	//	vec3 N = glm::cross(d1, d2);
+	//	
+	//	vertexData[indexData[i]].normal += vec4(N, 1);
+	//	vertexData[indexData[i + 1]].normal += vec4(N, 1);
+	//	vertexData[indexData[i + 2]].normal += vec4(N, 1);
+	//}
+	////normalize normals
+	//for (int i = 0; i < iVertexCount; i++)
+	//{
+	//	glm::normalize(vertexData[i].normal);
+	//}
+
 
 	m_mesh.m_indexCount = iIndexCount;
 
@@ -117,9 +157,11 @@ void Terrain::BuildGrid()
 	//	tell OpenGL about our vertex structure
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
+	//glEnableVertexAttribArray(2);
 
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(terrain_vertex), 0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(terrain_vertex), (void*)sizeof(vec4));
+	//glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(terrain_vertex), (void*)(sizeof(vec4) + (sizeof(vec2))));
 
 	//	unbind stuff!!
 	glBindVertexArray(0);
@@ -133,11 +175,10 @@ void Terrain::BuildGrid()
 
 void Terrain::BuildPerlinTexture()
 {
+	delete[] perlin_data;
 
-	//float* perlin_data = new float[gridSize * gridSize];
-	
 	int dims = gridSize;
-	float *perlin_data = new float[dims * dims]; 
+	perlin_data = new float[dims * dims]; 
 	float scale = (bumpiness / dims) * 3; 
 
 	for (int x = 0; x < dims; ++x)

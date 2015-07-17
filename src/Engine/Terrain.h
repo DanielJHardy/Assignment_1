@@ -34,6 +34,8 @@ private:
 
 	unsigned int m_texture_perlin;
 
+	float* perlin_data;
+
 };
 
 #endif // !_TERRAIN_H_

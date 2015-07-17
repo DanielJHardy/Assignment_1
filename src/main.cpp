@@ -55,8 +55,8 @@ void AddLevel_3dEnviroment(Game& game)
 
 	//terrain
 	enviroment->m_land = Terrain();
-	enviroment->m_land.BuildGrid();
 	enviroment->m_land.BuildPerlinTexture();
+	enviroment->m_land.BuildGrid();
 	enviroment->m_land.LoadTextures("./data/textures/grass/DIFFUSE.jpg", "./data/textures/rock/DIFFUSE.jpg");
 
 	//water
@@ -87,26 +87,20 @@ void AddLevel_3dEnviroment(Game& game)
 	bob->SetScale(vec3(2,2,2));
 	enviroment->AddActor(bob);
 
+	//canoe
 	bob = new Mesh();
-	bob->LoadMeshData("./data/models/f16.obj");
-	bob->LoadTextures("./data/textures/wood.jpg", nullptr, nullptr);
-	bob->SetPosition(vec3(10, above_terrain, 0));
 	bob->SetScale(vec3(0.5f, 0.5f, 0.5f));
+	bob->LoadMeshData("./data/models/tree.obj");
+	bob->LoadTextures("./data/textures/rock/DIFFUSE.jpg", 0, 0);
 	enviroment->AddActor(bob);
 
 
-
-	//canoe
-	//bob = new Mesh();
-	//bob->SetPosition(vec3(0,1.2f,10));
-	//bob->LoadMeshData("./data/models/Canoe.obj");
-	//bob->LoadTextures("./data/textures/wood.jpg", 0, 0);
-	//enviroment->AddActor(bob);
-
-
 	/////lights///////
-	DirectionalLight dirLight = DirectionalLight(vec3(0, -1, 0), vec3(1, 1, 1));
+	DirectionalLight dirLight = DirectionalLight(vec3(0.62, -0.58, 0.53), vec3(1, 1, 1));
 	enviroment->m_lights_directional.push_back(dirLight);
+
+	//PointLight point = PointLight(vec3(0, 4, 30), vec3(1), 20);
+	//enviroment->m_lights_point.push_back(point);
 
 
 	//GUI
@@ -123,6 +117,10 @@ void AddLevel_3dEnviroment(Game& game)
 	TwAddButton(game.m_bar, "comment2", NULL, NULL, " label='Water Properties' ");
 	//
 	TwAddVarRW(game.m_bar, "water_active",TW_TYPE_BOOL8, &enviroment->m_water.m_active, "label='Active'");
+	//
+	TwAddSeparator(game.m_bar, "Light", "");
+	TwAddButton(game.m_bar, "comment3", NULL, NULL, " label='Light Properties' ");
+	//TwAddVarRW(game.m_bar, "Light Dir", TW_TYPE_DIR3F, &enviroment->m_lights_directional[0], "");
 	//
 	TwAddSeparator(game.m_bar, "buttons", "");
 	//

@@ -30,7 +30,7 @@ void main()
 	//blend textures based on height
 	albedo = mix(grass_clr.xyz, stone_clr.xyz, perlin).xyz;
 
-	//albedo = texture(perlin_texture, vTexCoord).rrr; 
+	//albedo = normal.xyz;//texture(perlin_texture, vTexCoord).rrr; 
 
 
 }

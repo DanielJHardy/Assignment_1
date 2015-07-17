@@ -18,6 +18,6 @@ void main()
 	position = viewspace_position.xyz;
 	normal = (viewspace_normal.xyz) * 0.5f + 0.5f;
 
-	//albedo = texture(diffuse, vTexCoord).xyz;
+	//albedo = normal;
 	albedo = texture(diffuse, vec2(vTexCoord.x + (Time * 0.01f), vTexCoord.y)).xyz;
 }

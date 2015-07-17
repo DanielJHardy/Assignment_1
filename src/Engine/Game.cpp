@@ -160,12 +160,30 @@ void Game::Draw()
 	glClearBufferfv(GL_COLOR, 2, (float*)&clear_normal);
 
 	//set gbuffer as current shader
+	glUseProgram(m_g_program_terrain); ////////////////////////////////////////////////////////////////////////////////////////////Terrain
+	current_shader_program = m_g_program_terrain;
+
+	//set shader uniforms
+	int view_uniform = glGetUniformLocation(m_g_program_terrain, "view");
+	int view_proj_uniform = glGetUniformLocation(m_g_program_terrain, "view_proj");
+
+	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getView());	//view
+	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getProjectionView()); //ProjView
+
+	int maxHeight_uniform = glGetUniformLocation(m_g_program_terrain, "max_height");
+	glUniform1f(maxHeight_uniform, m_currentLevel->m_land.max_height);
+
+	//////draw scene///////																-<><><>- Objects
+	//draw level
+	m_currentLevel->m_land.Draw();
+
+	//set gbuffer as current shader
 	glUseProgram(m_g_program_default); ////////////////////////////////////////////////////////////////////////////////////////////non textured
 	current_shader_program = m_g_program_default;
 
 	//set shader uniforms
-	int view_uniform = glGetUniformLocation(m_g_program_default, "view");
-	int view_proj_uniform = glGetUniformLocation(m_g_program_default, "view_proj");
+	view_uniform = glGetUniformLocation(m_g_program_default, "view");
+	view_proj_uniform = glGetUniformLocation(m_g_program_default, "view_proj");
 
 	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getView());	//view
 	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getProjectionView()); //ProjView
@@ -189,37 +207,6 @@ void Game::Draw()
 	//draw level
 	m_currentLevel->Draw_diff();
 
-	//set gbuffer as current shader
-	glUseProgram(m_g_program_terrain); ////////////////////////////////////////////////////////////////////////////////////////////Terrain
-	current_shader_program = m_g_program_terrain;
-
-	//set shader uniforms
-	view_uniform = glGetUniformLocation(m_g_program_terrain, "view");
-	view_proj_uniform = glGetUniformLocation(m_g_program_terrain, "view_proj");
-
-	glUniformMatrix4fv(view_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getView());	//view
-	glUniformMatrix4fv(view_proj_uniform, 1, GL_FALSE, (float*)&m_currentLevel->m_camera->getProjectionView()); //ProjView
-
-	int maxHeight_uniform = glGetUniformLocation(m_g_program_terrain, "max_height");
-	glUniform1f(maxHeight_uniform, m_currentLevel->m_land.max_height);
-
-	//diffuse uniform
-	////set texture slot
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, m_currentLevel->m_land.m_texture_grass);
-
-	int grass_uniform = glGetUniformLocation(m_g_program_terrain, "texture_grass");
-	glUniform1i(grass_uniform, 0); 
-
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, m_currentLevel->m_land.m_texture_stone);
-
-	int stone_uniform = glGetUniformLocation(m_g_program_terrain, "texture_stone");
-	glUniform1i(stone_uniform, 1);
-
-	//////draw scene///////																-<><><>- Objects
-	//draw level
-	m_currentLevel->m_land.Draw();
 
 	//////////////////////////////////////water//////////////////////////////////////////////////
 	glUseProgram(m_g_program_water);

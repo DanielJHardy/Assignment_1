@@ -7,7 +7,7 @@
 
 #include "FileManager.h"
 
-struct terrain_vertex
+struct water_vertex
 {
 	vec4 position;
 	vec2 tex_coord;
@@ -69,7 +69,7 @@ void Water::Create(vec2 a_size)
 	//	a_size is the real world dimensions of the grid
 	//	gridSize is the number of rows and columns
 
-	int gridSize = a_size.x * 2;
+	int gridSize = (int)(a_size.x * 2);
 
 	if (m_mesh.m_indexCount > 0)
 	{
@@ -81,7 +81,7 @@ void Water::Create(vec2 a_size)
 	//	compute how many vertices we need
 	unsigned int iVertexCount = (gridSize + 1) * (gridSize + 1);
 	//	allocate vertex data
-	terrain_vertex*	vertexData = new terrain_vertex[iVertexCount];
+	water_vertex*	vertexData = new water_vertex[iVertexCount];
 
 	//	compute how many indices we need
 	unsigned int iIndexCount = gridSize * gridSize * 6;
@@ -132,15 +132,15 @@ void Water::Create(vec2 a_size)
 	glBindBuffer(GL_ARRAY_BUFFER, m_mesh.m_VBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_mesh.m_IBO);
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(terrain_vertex)* iVertexCount, vertexData, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(water_vertex)* iVertexCount, vertexData, GL_STATIC_DRAW);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)* iIndexCount, indexData, GL_STATIC_DRAW);
 
 	//	tell OpenGL about our vertex structure
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(terrain_vertex), 0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(terrain_vertex), (void*)sizeof(vec4));
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(water_vertex), 0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(water_vertex), (void*)sizeof(vec4));
 
 	//	unbind stuff!!
 	glBindVertexArray(0);
